@@ -1,0 +1,14 @@
+body {
+    background: black;
+    color: #333;
+	font-family: "Courier New", Courier, monospace;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+canvas {
+	border: 1px solid #888;
+}
