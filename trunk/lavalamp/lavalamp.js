@@ -38,7 +38,11 @@ function calculateImageData(){
     var dx, dy;
     var b;
     var metaBall;
-	var flatness = (Math.sin(frame/100*Math.sin(frame/313))+1)*200;
+    var divisor = 100*Math.sin(frame/313);
+    if (Math.abs(divisor)==0) {
+    	divisor = 0.0001;
+    }
+	var flatness = (Math.sin(frame/divisor)+1)*200;
     for (y = 0; y < h; y++) {
         for (x = 0; x < w; x++) {
             s = 0;
