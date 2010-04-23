@@ -101,7 +101,7 @@ function fakeBumbMapping(){
             dx = dx + 128;
             dy = dy + 128;
             r = b * (dx*dx + dy*dy) / 50000;
-			r = b>255 ? 255 : r;
+			r = r>255 ? 255 : r;
             data[i] = r;
             i +=2;
             data[i] = b;
