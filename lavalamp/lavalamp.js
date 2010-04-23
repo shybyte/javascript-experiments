@@ -41,8 +41,8 @@ function calculateImageData(){
     var osc2 = sin(frame / 87 + osc0 * osc1 * 10);
     var osc3 = sin(frame / 100);
     var flatness = ((osc2 * osc0 + osc3 * osc1) + 1) * 200;
-    for (y = 0; y < h; y++) {
-        for (x = 0; x < w; x++) {
+    for (var y = 0; y < h; y++) {
+        for (var x = 0; x < w; x++) {
             s = 0;
             for (i2 = 0; i2 < mbn; i2++) {
                 metaBall = mb[i2];
@@ -93,8 +93,8 @@ function fakeBumbMapping(){
     var i2 = w+1;
     var dx, dy, b, r;
     var wminus1 = w - 1
-    for (y = 1; y < h; y++) {
-        for (x = 1; x < wminus1; x++) {
+    for (var y = 1; y < h; y++) {
+        for (var x = 1; x < wminus1; x++) {
             b = data2[i2];
             dx = b - data2[i2 - 1]
             dy = b - data2[i2 - w];
@@ -131,6 +131,6 @@ function initLavaLamp(){
     anim();
 }
 
-onload = function(){
+window.onload = function(){
     initLavaLamp();
 }
