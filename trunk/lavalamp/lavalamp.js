@@ -38,8 +38,11 @@ function calculateImageData(){
     var dx, dy;
     var b;
     var metaBall;
-    var sinespeed = Math.sin(frame/313);
-	var flatness = (Math.sin(frame/100*sinespeed)+1)*200;
+    var osc0 = Math.abs(Math.sin(frame/313));
+    var osc1 = Math.abs(Math.cos(frame/213));
+    var osc2 = Math.sin(frame/87+osc0*osc1*10);
+    var osc3 = Math.sin(frame/100);
+	var flatness = ((osc2*osc0+osc3*osc1)+1)*200;
     for (y = 0; y < h; y++) {
         for (x = 0; x < w; x++) {
             s = 0;
