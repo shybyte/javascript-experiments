@@ -36,10 +36,9 @@ function calculateImageData(){
     var i = 0, i2 = 0;
     var s = 0;
     var dx, dy;
-    var r, g, b;
+    var b;
     var metaBall;
-	var ballness = (Math.sin(frame/100*Math.sin(frame/313))+1)*200;
-    g = 0;
+	var flatness = (Math.sin(frame/100*Math.sin(frame/313))+1)*200;
     for (y = 0; y < h; y++) {
         for (x = 0; x < w; x++) {
             s = 0;
@@ -51,18 +50,18 @@ function calculateImageData(){
             }
             s = 1 / s;
             if (s < 1000) {
-                if (s < ballness) {
-                    r = 1;
+                if (s < flatness) {
+                    b = 1;
                 }
                 else {
-                    r = 1 - (s - ballness) / (1000-ballness);
+                    b = 1 - (s - flatness) / (1000-flatness);
                 }
             }
             else {
-                r = 0;
+                b = 0;
             }
             
-            data2[i++] = r * 255;
+            data2[i++] = b * 255;
         }
     }
 }
@@ -91,27 +90,30 @@ function moveBalls(){
 
 
 function fakeBumbMapping(){
-    var lineDataWidth = w * 4;
-    var i = lineDataWidth;
+    var i = w * 4;
 	var i2 = w;
-    var dx, dy, r;
+    var dx, dy, b,r;
 	var wminus1 = w-1
     for (y = 1; y < h; y++) {
         i += 4;
 		i2 +=1;
         for (x = 1; x < wminus1; x++) {
-            r = data2[i2];
-            dx = r - data2[i2 - 1]
-            dy = r - data2[i2 - w];
+            b = data2[i2];
+            dx = b - data2[i2 - 1]
+            dy = b - data2[i2 - w];
             dx = dx + 128;
             dx = dx * dx;
             dy = dy + 128;
             dy = dy * dy;
-            data[i] = r * (dx + dy) / 50000;
-            i++;
-            //data[i] = 0;
-            i++
+            r = b * (dx + dy) / 50000;
+            if (r>255) {
+            	r = 255
+            }
             data[i] = r;
+            i++;
+            // data[i] = 0;
+            i++
+            data[i] = b;
             i++;
             data[i++] = 255;
 			i2++;
