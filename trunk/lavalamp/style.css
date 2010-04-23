@@ -12,3 +12,7 @@ h1 {
 canvas {
 	border: 1px solid #888;
 }
+
+#info {
+	margin-top: 1em;
+}
