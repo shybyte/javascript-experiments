@@ -1,0 +1,18 @@
+{
+  "name": "My First Extension",
+  "version": "1.0",
+  "description": "The first extension that I made.",
+  "background_page": "chrome-extension/bg.html",
+  "content_scripts": [ {
+      "js": [ "lib/aes.js","lib/jquery/jquery.js","js/encrypt-the-cloud.js","chrome-extension/content.js"],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "run_at": "document_end"
+   } ],
+  "browser_action": {
+    "default_icon": "chrome-extension/icon.png",
+    "popup": "chrome-extension/popup.html"
+  },
+  "permissions": [
+    "http://api.flickr.com/"
+  ]
+}
