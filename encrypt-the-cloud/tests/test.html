@@ -13,6 +13,16 @@
                 test("addSpaces", function(){
                     equals("1234567 89", addSpaces("123456789") );
                 });
+				
+				test("styleTextBox keeps orginal width", function(){
+					textarea = $('#textarea1');
+					originalWidth = textarea.outerWidth();
+					
+					styleTextBox(textarea);
+					
+                    equals(textarea.outerWidth(),originalWidth) ;
+					
+                });
                 
             });
         </script>
@@ -23,5 +33,10 @@
         <h2 id="qunit-userAgent"></h2>
         <ol id="qunit-tests">
         </ol>
+		
+		<div>
+			<textarea id="textarea1" style="padding:5px;border-width:1px;width:100px;"></textarea>
+		</div>
+		
     </body>
 </html>
