@@ -43,11 +43,6 @@ function getImagePath(filename){
 	return "images/"+filename;
 }
 
-function isEncrypted(s){
-	parts = textWrapperRegExpSingle.exec(s.trim());
-    return parts!=null;
-}
-
 function decryptText(textWrapper, password){
     // {{marco::endcryptedText}}
     parts = textWrapperRegExpSingle.exec(textWrapper.trim());
@@ -90,15 +85,19 @@ function setTextBoxText(textbox,text){
 
 function toogleTextboxEncryption(textbox){
     text = getTextBoxText(textbox)
-    if (isEncrypted(text)) {
+    if (textbox.data('encypted') == true) {
         decryptedText = decryptText(text);
         if (decryptedText != null) {
 			setTextBoxText(textbox,decryptedText)
         }
+		textbox.css('background-image', 'url('+getImagePath('decrypted.png')+')');
+        textbox.data('encypted', false)
     }
     else {
         if (text.trim().length > 0) {
 			setTextBoxText(textbox,encryptText(text))
+            textbox.css('background-image', 'url('+getImagePath('encrypted.png')+')');
+            textbox.data('encypted', true)
         }
         else {
             alert("Nothing to encrypt!");
@@ -138,7 +137,15 @@ function timer(){
     $('textarea,input:text,div[contenteditable=true]').each(function(i, e){
         textarea = $(e);
         if (!textarea.data('found')) {
-            textarea.dblclick(function(event){
+			styleTextBox(textarea)
+			var clickHandler = function(event){
+                var x = event.pageX - this.offsetLeft;
+                var y = event.pageY - this.offsetTop;
+                if (x < 20 && y < 20) {
+                    toogleTextboxEncryption($(this));
+                }
+            };
+            textarea.click(clickHandler).dblclick(function(event){
 				toogleTextboxEncryption($(this));
 			});
             textarea.data('found', true);
