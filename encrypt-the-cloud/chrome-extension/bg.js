@@ -1,3 +1,22 @@
+const defaultState = {
+		username: "shybyte",
+		password: "secret",
+};
+
+
+function setState(state) {
+	localStorage["state"] = JSON.stringify(state);
+}
+
+function getState() {
+	try {
+		return JSON.parse(localStorage["state"]);
+	}
+	catch (error) {
+		return defaultState;
+	}
+}
+
 chrome.extension.onRequest.addListener(
   function(request, sender, sendResponse) {
     console.log(sender.tab ?
@@ -8,3 +27,5 @@ chrome.extension.onRequest.addListener(
     else
       sendResponse({}); // snub them.
   });
+  
+  
