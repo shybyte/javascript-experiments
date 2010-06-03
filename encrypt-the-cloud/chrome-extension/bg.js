@@ -4,7 +4,8 @@ const defaultState = {
 		friends: [{
 			password: 'stefe',
 			key: 'liebertee'
-		}]
+		}],
+		sites:['google','facebook','meinvz']
 };
 
 
