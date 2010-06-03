@@ -3,8 +3,7 @@ $(function(){
         clearStyle: true,
         autoHeight: false
     });
-    var state = chrome.extension.getBackgroundPage().getState();
-    initDisplay(state);
+    initDisplay();
     $('#save').click(function(){
         saveState();
         window.close()
@@ -12,14 +11,24 @@ $(function(){
     })
 });
 
-
 function saveState(){
     var state = chrome.extension.getBackgroundPage().getState();
     state.key = $("#key").val();
     state.username = $("#username").val();
     state.friends = getFriendsFromUI();
+	state.sites = getSitesFromUI();
     chrome.extension.getBackgroundPage().setState(state);
 }
+
+function initDisplay(){
+	var state = chrome.extension.getBackgroundPage().getState();
+    $("#username").val(state.username);
+    $("#key").val(state.key);
+    initFriendsGUI(state.friends);
+    initSitesGUI(state.sites);
+}
+
+/* Friends */
 
 function getFriendsFromUI(){
     var friends = [];
@@ -30,12 +39,6 @@ function getFriendsFromUI(){
         });
     });
     return friends;
-}
-
-function initDisplay(state){
-    $("#username").val(state.username);
-    $("#key").val(state.key);
-    initFriendsGUI(state.friends);
 }
 
 function initFriendsGUI(friends){
@@ -75,7 +78,47 @@ function displayFriends(friends){
     }
 }
 
-// mock background page
+
+/* Sites */
+
+function initSitesGUI(sites){
+    var tableBody = getSitesTableBody();
+    if (sites) {
+        $.each(sites, function(i, site){
+            if (!isEmpty(site)) {
+                addSiteRow(tableBody, site);
+            }
+        });
+    }
+    $('#addSiteButton').click(function(){
+        addSiteRow(getSitesTableBody(), "");
+    });
+}
+
+function getSitesFromUI(){
+    var sites = [];
+    $('tr', getSitesTableBody()).each(function(){
+        sites.push($('.site', this).val());
+    });
+    return sites;
+}
+
+function addSiteRow(tableBody, site){
+    tableBody.append($.nano('<tr><td><input type="text" class="site" value="{site}"></td><td><button class="removeButton">-</button></td></tr>', {site:site}));
+    $('tr:last-child .removeButton', tableBody).click(function(){
+        $(this.parentNode.parentNode).remove();
+    });
+}
+
+function getSitesTableBody(){
+    return $('#sitesTable tbody');
+}
+
+
+
+
+/* mock background page */
+
 if (!chrome.extension) {
     chrome.extension = {
         getBackgroundPage: function(){
@@ -88,7 +131,8 @@ if (!chrome.extension) {
                 }, {
                     username: "",
                     key: " "
-                }]
+                }],
+                sites: ['google', 'facebook', 'meinvz']
             };
             return {
                 setState: function(newState){
