@@ -116,8 +116,11 @@ function decryptBodyText(){
 		if (contenteditable=='true') {
 			return;
 		}
-        html = html.replace(textWrapperRegExp, decryptText)
-        e.data = html
+		if (textWrapperRegExp.test(html)){
+        	html2 = html.replace(textWrapperRegExp, decryptText)
+        	e.data = html2
+			$(e.parentNode).effect("highlight", {}, 3000);			
+		}
     });
 }
 
