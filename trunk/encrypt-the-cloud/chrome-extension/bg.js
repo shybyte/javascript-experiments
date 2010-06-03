@@ -1,6 +1,10 @@
 const defaultState = {
 		username: "shybyte",
-		password: "secret",
+		key: "secret",
+		friends: [{
+			password: 'stefe',
+			key: 'liebertee'
+		}]
 };
 
 
