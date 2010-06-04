@@ -36,24 +36,32 @@ function removeFromArray(a, element){
     }
     if (pos >= 0) {
         for (var i = pos; i < a.length - 1; i++) {
-        	a[i]=a[i+1];
+            a[i] = a[i + 1];
         }
-		a.pop();
+        a.pop();
     }
 }
 
 
-function exist(array,predicate){
-	for(var i=0;i<array.length;i++) {
-		if (predicate(array[i])){
-			return true;
-		}
-	}
-	return false
+function exist(array, predicate){
+    for (var i = 0; i < array.length; i++) {
+        if (predicate(array[i])) {
+            return true;
+        }
+    }
+    return false
 }
 
-function isEnabledForSite(state,host){
+function isEnabledForSite(state, location){
     return exist(state.sites, function(site){
-        return host.indexOf(site.domainPart) >= 0;
+        return isSitePatternMatchingLocation(site.pattern,location)
     });
+}
+
+function isSitePatternMatchingLocation(sitePattern, location){
+	if (sitePattern.indexOf('/')>=0) {
+		return location.href.indexOf(sitePattern) >= 0;
+	} else {
+	    return location.host.indexOf(sitePattern) >= 0;    
+	}
 }

@@ -85,7 +85,7 @@ function initSitesGUI(sites){
     var tableBody = getSitesTableBody();
     if (sites) {
         $.each(sites, function(i, site){
-            if (!isEmpty(site.domainPart)) {
+            if (!isEmpty(site.pattern)) {
                 addSiteRow(tableBody, site);
             }
         });
@@ -98,13 +98,13 @@ function initSitesGUI(sites){
 function getSitesFromUI(){
     var sites = [];
     $('tr', getSitesTableBody()).each(function(){
-        sites.push({domainPart:$('.site', this).val()});
+        sites.push({pattern:$('.site', this).val()});
     });
     return sites;
 }
 
 function addSiteRow(tableBody, site){
-    tableBody.append($.nano('<tr><td><input type="text" class="site" value="{domainPart}"></td><td><button class="removeButton">-</button></td></tr>', site));
+    tableBody.append($.nano('<tr><td><input type="text" class="site" value="{pattern}"></td><td><button class="removeButton">-</button></td></tr>', site));
     $('tr:last-child .removeButton', tableBody).click(function(){
         $(this.parentNode.parentNode).remove();
     });

@@ -8,13 +8,6 @@ var state2 = {
     friends: [{
         username: 'stefe',
         key: 'liebertee'
-    }],
-    sites: [{
-        domainPart: 'google'
-    }, {
-        domainPart: 'facebook'
-    }, {
-        domainPart: 'meinvz'
     }]
 };
 addUserMap(state2);
@@ -179,10 +172,17 @@ function timer(){
                     toogleTextboxEncryption($(this));
                 }
             });
+			textarea.keydown(function(event){
+				console.log(event);
+				if (encryptTheCloudIsActive && event.ctrlKey && event.keyCode == 89) {
+					toogleTextboxEncryption($(this));
+				}
+			});
             textarea.data('found', true);
         }
     });
 }
+
 
 var encryptTheCloudTimer
 var encryptTheCloudIsActive = false
