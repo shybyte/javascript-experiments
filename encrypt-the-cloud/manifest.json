@@ -1,7 +1,10 @@
 {
-  "name": "My First Extension",
+  "name": "Encrypt the Cloud",
   "version": "1.0",
-  "description": "The first extension that I made.",
+  "description": "Post encrypted messages and read automaticly decrypted messages of your friends on every web site. Protect your privacy. Encrypt Facebook.",
+  "icons": { "16": "chrome-extension/icons/icon-16.png",
+           "48": "chrome-extension/icons/icon-48.png",
+          "128": "chrome-extension/icons/icon-128.png" },
   "background_page": "chrome-extension/bg.html",
   "content_scripts": [ {
       "js": [ "lib/aes.js","lib/jquery/jquery.js","lib/jquery/jquery-ui.min.js","js/encrypt-the-cloud.js","chrome-extension/content.js"],
@@ -9,10 +12,7 @@
       "run_at": "document_end"
    } ],
   "browser_action": {
-    "default_icon": "chrome-extension/icon.png",
+    "default_icon": "chrome-extension/icons/icon-19.png",
     "popup": "chrome-extension/popup.html"
-  },
-  "permissions": [
-    "http://api.flickr.com/"
-  ]
+  }
 }
