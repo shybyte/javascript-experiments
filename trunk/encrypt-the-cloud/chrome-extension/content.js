@@ -12,7 +12,7 @@ function setState(newState){
 }
 
 function isEnabledForCurrentSite(state){
-    return isEnabledForSite(window.location.host);
+    return isEnabledForSite(state,window.location.host);
 }
 
 function getState(){
