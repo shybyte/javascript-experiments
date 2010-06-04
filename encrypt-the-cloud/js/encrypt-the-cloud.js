@@ -29,13 +29,21 @@ function removeSpaces(s){
 }
 
 var state2 = {
-    username: "shybyte",
-    key: "secret",
+    user: {
+        username: "shybyte",
+        key: "secret",
+    },
     friends: [{
         username: 'stefe',
         key: 'liebertee'
     }],
-    sites: ['google', 'facebook', 'meinvz']
+    sites: [{
+        domainPart: 'google'
+    }, {
+        domainPart: 'facebook'
+    }, {
+        domainPart: 'meinvz'
+    }]
 };
 addUserMap(state2);
 
@@ -48,12 +56,9 @@ function addUserMap(state){
     $.each(state.friends, function(i, friend){
         map[friend.username] = friend;
     });
-    map[state.username] = {
-        username: state.username,
-        key: state.key
-    };
+    map[state.user.username] = state.user;
     state.userByName = map;
-    console.log(state)
+    //console.log(state)
 }
 
 function getPassword(username){
@@ -67,11 +72,11 @@ function getPassword(username){
 }
 
 function getUserPassword(){
-    return getState().key;
+    return getState().user.key;
 }
 
 function getUsername(){
-    return getState().username;
+    return getState().user.username;
 }
 
 function getImagePath(filename){

@@ -1,12 +1,20 @@
 const defaultState = {
-    username: "shybyte",
-    key: "secret",
-    friends: [{
-        password: 'stefe',
-        key: 'liebertee'
-    }],
-    sites: ['google', 'facebook', 'meinvz']
-};
+	user: {
+		username: "shybyte",
+		key: "secret",
+	},
+	friends: [{
+		username: 'stefe',
+		key: 'liebertee'
+	}],
+	sites: [{
+		domainPart: 'google'
+	}, {
+		domainPart: 'facebook'
+	}, {
+		domainPart: 'meinvz'
+	}]
+}
 
 var ports = [];
 

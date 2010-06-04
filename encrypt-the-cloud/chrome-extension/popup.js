@@ -13,8 +13,8 @@ $(function(){
 
 function saveState(){
     var state = chrome.extension.getBackgroundPage().getState();
-    state.key = $("#key").val();
-    state.username = $("#username").val();
+    state.user.key = $("#key").val();
+    state.user.username = $("#username").val();
     state.friends = getFriendsFromUI();
 	state.sites = getSitesFromUI();
     chrome.extension.getBackgroundPage().setState(state);
@@ -22,8 +22,8 @@ function saveState(){
 
 function initDisplay(){
 	var state = chrome.extension.getBackgroundPage().getState();
-    $("#username").val(state.username);
-    $("#key").val(state.key);
+    $("#username").val(state.user.username);
+    $("#key").val(state.user.key);
     initFriendsGUI(state.friends);
     initSitesGUI(state.sites);
 }
@@ -85,7 +85,7 @@ function initSitesGUI(sites){
     var tableBody = getSitesTableBody();
     if (sites) {
         $.each(sites, function(i, site){
-            if (!isEmpty(site)) {
+            if (!isEmpty(site.domainPart)) {
                 addSiteRow(tableBody, site);
             }
         });
@@ -98,13 +98,13 @@ function initSitesGUI(sites){
 function getSitesFromUI(){
     var sites = [];
     $('tr', getSitesTableBody()).each(function(){
-        sites.push($('.site', this).val());
+        sites.push({domainPart:$('.site', this).val()});
     });
     return sites;
 }
 
 function addSiteRow(tableBody, site){
-    tableBody.append($.nano('<tr><td><input type="text" class="site" value="{site}"></td><td><button class="removeButton">-</button></td></tr>', {site:site}));
+    tableBody.append($.nano('<tr><td><input type="text" class="site" value="{domainPart}"></td><td><button class="removeButton">-</button></td></tr>', site));
     $('tr:last-child .removeButton', tableBody).click(function(){
         $(this.parentNode.parentNode).remove();
     });
