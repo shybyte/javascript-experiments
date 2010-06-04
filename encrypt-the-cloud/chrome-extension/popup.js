@@ -115,8 +115,6 @@ function getSitesTableBody(){
 }
 
 
-
-
 /* mock background page */
 
 if (!chrome.extension) {

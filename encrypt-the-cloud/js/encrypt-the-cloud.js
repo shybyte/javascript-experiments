@@ -1,33 +1,5 @@
 var textWrapperRegExp = /{{(.*?)::(.*?)}}/g; //
 var textWrapperRegExpSingle = /{{(.*?)::(.*?)}}/; //
-$.fn.textNodes = function(){
-    var ret = [];
-    
-    (function(el){
-        if ((el.nodeType == 3) || (el.nodeName == "BR")) 
-            ret.push(el);
-        else 
-            for (var i = 0; i < el.childNodes.length; ++i) 
-                arguments.callee(el.childNodes[i]);
-    })(this[0]);
-    return $(ret);
-}
-
-function addSpaces(s){
-    var result = "";
-    for (var i = 0; i < s.length; i++) {
-        result += s.charAt(i)
-        if ((i + 1) % 7 == 0) {
-            result += " ";
-        }
-    }
-    return result;
-}
-
-function removeSpaces(s){
-    return s.replace(/[ ]/g, '');
-}
-
 var state2 = {
     user: {
         username: "shybyte",
@@ -203,19 +175,34 @@ function timer(){
         textarea = $(e);
         if (!textarea.data('found')) {
             textarea.dblclick(function(event){
-                toogleTextboxEncryption($(this));
+                if (encryptTheCloudIsActive) {
+                    toogleTextboxEncryption($(this));
+                }
             });
             textarea.data('found', true);
         }
     });
 }
 
+var encryptTheCloudTimer
+var encryptTheCloudIsActive = false
+
 function startEncryptTheCloud(){
-    window.setInterval(timer, 1000)
+    if (!encryptTheCloudIsActive) {
+        encryptTheCloudTimer = window.setInterval(timer, 1000)
+        encryptTheCloudIsActive = true;
+    }
 }
 
-function startEncryptTheCloudOnce(){
-    window.setTimeout(timer, 1000)
+function stopEncryptTheCloud(){
+    if (encryptTheCloudIsActive) {
+        encryptTheCloudTimer = window.clearInterval(encryptTheCloudTimer);
+        encryptTheCloudIsActive = false;
+    }
+}
+
+function runEncryptTheCloudOnce(){
+    window.setTimeout(timer, 1000);
 }
 
 

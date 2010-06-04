@@ -1,9 +1,18 @@
 var state
-var started = false;
 
 function setState(newState){
-    addUserMap(newState);
     state = newState;
+    if (isEnabledForCurrentSite(state)) {
+    	addUserMap(newState);
+        startEncryptTheCloud()
+    }
+    else {
+        stopEncryptTheCloud()
+    }
+}
+
+function isEnabledForCurrentSite(state){
+    return isEnabledForSite(window.location.host);
 }
 
 function getState(){
@@ -22,10 +31,6 @@ port.postMessage({
 port.onMessage.addListener(function(msg){
     if (msg.method == "onStateChanged") {
         setState(msg.state)
-        if (!started) {
-            started = true;
-            startEncryptTheCloud();
-        }
     }
 });
 
