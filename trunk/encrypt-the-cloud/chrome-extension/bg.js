@@ -8,16 +8,14 @@ const defaultState = {
         key: 'liebertee'
     }],
     sites: [{
-        pattern: 'google'
-    }, {
         pattern: 'facebook'
     }, {
         pattern: 'meinvz'
-    },
-	{
+    }, {
+        pattern: 'studivz'
+    }, {
         pattern: '/encrypt-the-cloud-demo.html'
-    }
-	]
+    }]
 }
 
 var ports = [];
