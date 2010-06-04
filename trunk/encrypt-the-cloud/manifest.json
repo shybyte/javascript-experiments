@@ -7,7 +7,7 @@
           "128": "chrome-extension/icons/icon-128.png" },
   "background_page": "chrome-extension/bg.html",
   "content_scripts": [ {
-      "js": [ "lib/aes.js","lib/jquery/jquery.js","lib/jquery/jquery-ui.min.js","js/encrypt-the-cloud.js","chrome-extension/content.js"],
+      "js": [ "lib/aes.js","lib/jquery/jquery.js","lib/jquery/jquery-ui.min.js","js/utils.js","js/encrypt-the-cloud.js","chrome-extension/content.js"],
       "matches": [ "http://*/*", "https://*/*" ],
       "run_at": "document_end"
    } ],
@@ -16,4 +16,5 @@
     "default_icon": "chrome-extension/icons/icon-19.png",
     "popup": "chrome-extension/popup.html"
   }
+  
 }

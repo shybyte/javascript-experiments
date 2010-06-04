@@ -1,19 +1,19 @@
 const defaultState = {
-	user: {
-		username: "shybyte",
-		key: "secret",
-	},
-	friends: [{
-		username: 'stefe',
-		key: 'liebertee'
-	}],
-	sites: [{
-		domainPart: 'google'
-	}, {
-		domainPart: 'facebook'
-	}, {
-		domainPart: 'meinvz'
-	}]
+    user: {
+        username: "shybyte",
+        key: "secret",
+    },
+    friends: [{
+        username: 'stefe',
+        key: 'liebertee'
+    }],
+    sites: [{
+        domainPart: 'google'
+    }, {
+        domainPart: 'facebook'
+    }, {
+        domainPart: 'meinvz'
+    }]
 }
 
 var ports = [];
@@ -22,7 +22,8 @@ var ports = [];
 
 function setState(state){
     localStorage["state"] = JSON.stringify(state);
-	//console.log("setState");
+    //chrome.browserAction.setBadgeText({text:"on"});
+    //console.log("setState");
     $.each(ports, function(i, port){
         postState(port);
     });
@@ -53,7 +54,16 @@ chrome.extension.onConnect.addListener(function(port){
         }
     });
     port.onDisconnect.addListener(function(event){
-		//console.log("disconnect from" + port);
-		removeFromArray(ports,port)
+        //console.log("disconnect from" + port);
+        removeFromArray(ports, port)
     });
 });
+
+
+//chrome.tabs.onSelectionChanged.addListener(function(tabId, selectInfo){
+//    console.log("Selectec Tab " + tabId);
+//    chrome.pageAction.setIcon({
+//        tabId: tabId,
+//        path: 'icons/icon-19.png'
+//    });
+//});
