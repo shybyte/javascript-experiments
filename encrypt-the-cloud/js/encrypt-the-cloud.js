@@ -1,16 +1,13 @@
-var textWrapperRegExp = /{{.*?::(.*?)}}/g; //
-var textWrapperRegExpSingle = /{{.*?::(.*?)}}/; //
-
-var username = "marco"
-
-$.fn.textNodes = function() {
+var textWrapperRegExp = /{{(.*?)::(.*?)}}/g; //
+var textWrapperRegExpSingle = /{{(.*?)::(.*?)}}/; //
+$.fn.textNodes = function(){
     var ret = [];
-
+    
     (function(el){
-        if ((el.nodeType == 3)||(el.nodeName =="BR"))
+        if ((el.nodeType == 3) || (el.nodeName == "BR")) 
             ret.push(el);
-        else
-            for (var i=0; i < el.childNodes.length; ++i)
+        else 
+            for (var i = 0; i < el.childNodes.length; ++i) 
                 arguments.callee(el.childNodes[i]);
     })(this[0]);
     return $(ret);
@@ -31,29 +28,74 @@ function removeSpaces(s){
     return s.replace(/[ ]/g, '');
 }
 
+var state2 = {
+    username: "shybyte",
+    key: "secret",
+    friends: [{
+        username: 'stefe',
+        key: 'liebertee'
+    }],
+    sites: ['google', 'facebook', 'meinvz']
+};
+addUserMap(state2);
+
+function getState(){
+    return state2;
+}
+
+function addUserMap(state){
+    var map = {};
+    $.each(state.friends, function(i, friend){
+        map[friend.username] = friend;
+    });
+    map[state.username] = {
+        username: state.username,
+        key: state.key
+    };
+    state.userByName = map;
+    console.log(state)
+}
+
 function getPassword(username){
-    return "test";
+    var user = getState().userByName[username];
+    if (user) {
+        return user.key;
+    }
+    else {
+        return null;
+    }
 }
 
 function getUserPassword(){
-    return "test";
+    return getState().key;
+}
+
+function getUsername(){
+    return getState().username;
 }
 
 function getImagePath(filename){
-	return "images/"+filename;
+    return "images/" + filename;
 }
 
 function isEncrypted(s){
-	parts = textWrapperRegExpSingle.exec(s.trim());
-    return parts!=null;
+    parts = textWrapperRegExpSingle.exec(s.trim());
+    return parts != null;
 }
 
-function decryptText(textWrapper, password){
+function decryptText(textWrapper){
     // {{marco::endcryptedText}}
     parts = textWrapperRegExpSingle.exec(textWrapper.trim());
     if (parts != null) {
-        var text = parts[1];
-        return AesCtr.decrypt(removeSpaces(text), getPassword(), 256);
+        var username = parts[1];
+        var text = parts[2];
+        var key = getPassword(username)
+        if (key) {
+            return AesCtr.decrypt(removeSpaces(text), getPassword(username), 256);
+        }
+        else {
+            throw "UNKNOWN_USER";
+        }
     }
     else {
         alert("No correct encrypted text '" + textWrapper + "'");
@@ -63,29 +105,31 @@ function decryptText(textWrapper, password){
 
 function encryptText(text){
     encryptedText = addSpaces(AesCtr.encrypt(text, getUserPassword(), 256));
-    return "{{" + username + "::" + encryptedText + "}}";
+    return "{{" + getUsername() + "::" + encryptedText + "}}";
 }
 
 function isDiv(el){
-	return el.nodeName.toLowerCase()=="div";
+    return el.nodeName.toLowerCase() == "div";
 }
 
 function getTextBoxText(textbox){
-	var el=textbox[0];
-	if (isDiv(el)) {
-		return el.innerText;
-	} else {
-		return textbox.val()	
-	}
+    var el = textbox[0];
+    if (isDiv(el)) {
+        return el.innerText;
+    }
+    else {
+        return textbox.val()
+    }
 }
 
-function setTextBoxText(textbox,text){
-	var el=textbox[0];
-	if (isDiv(el)) {
-		return el.innerText=text;
-	} else {
-		return textbox.val(text)	
-	}
+function setTextBoxText(textbox, text){
+    var el = textbox[0];
+    if (isDiv(el)) {
+        return el.innerText = text;
+    }
+    else {
+        return textbox.val(text)
+    }
 }
 
 function toogleTextboxEncryption(textbox){
@@ -93,12 +137,12 @@ function toogleTextboxEncryption(textbox){
     if (isEncrypted(text)) {
         decryptedText = decryptText(text);
         if (decryptedText != null) {
-			setTextBoxText(textbox,decryptedText)
+            setTextBoxText(textbox, decryptedText)
         }
     }
     else {
         if (text.trim().length > 0) {
-			setTextBoxText(textbox,encryptText(text))
+            setTextBoxText(textbox, encryptText(text))
         }
         else {
             alert("Nothing to encrypt!");
@@ -108,42 +152,54 @@ function toogleTextboxEncryption(textbox){
 
 function decryptBodyText(){
     $('body').textNodes().each(function(i, e){
-        html = e.data		
-		if (!html) {
-			return;
-		}
-		contenteditable = e.parentNode.getAttribute('contenteditable');
-		if (contenteditable=='true') {
-			return;
-		}
-		if (textWrapperRegExp.test(html)){
-        	html2 = html.replace(textWrapperRegExp, decryptText)
-        	e.data = html2
-			$(e.parentNode).effect("highlight", {}, 3000);			
-		}
+        html = e.data
+        if (!html) {
+            return;
+        }
+        contenteditable = e.parentNode.getAttribute('contenteditable');
+        if (contenteditable == 'true') {
+            return;
+        }
+        if (textWrapperRegExp.test(html)) {
+            try {
+                html2 = html.replace(textWrapperRegExp, decryptText)
+                e.data = html2
+                $(e.parentNode).effect("highlight", {}, 3000);
+            } 
+            catch (ex) {
+                if (ex == 'UNKNOWN_USER') {
+                    //					$(e.parentNode).effect("highlight", {
+                    //						color: '#ff0000'
+                    //					}, 500);
+                }
+                else {
+                    throw ex;
+                }
+            }
+        }
     });
 }
 
 function styleTextBox(textarea){
-	var originalWidth = textarea.width();
-	var originalInnerWidth = textarea.innerWidth();
-	textarea.css('paddingLeft','0');
-	var originalLeftPadding =  originalInnerWidth-textarea.innerWidth();
-	var leftPadding = 16;
-	var newWidth =  originalWidth+originalLeftPadding-leftPadding;
-	textarea.width(newWidth);
-	textarea.css('padding-left', leftPadding+'px');
-	textarea.css('background', 'no-repeat url('+getImagePath('decrypted.png')+')');
+    var originalWidth = textarea.width();
+    var originalInnerWidth = textarea.innerWidth();
+    textarea.css('paddingLeft', '0');
+    var originalLeftPadding = originalInnerWidth - textarea.innerWidth();
+    var leftPadding = 16;
+    var newWidth = originalWidth + originalLeftPadding - leftPadding;
+    textarea.width(newWidth);
+    textarea.css('padding-left', leftPadding + 'px');
+    textarea.css('background', 'no-repeat url(' + getImagePath('decrypted.png') + ')');
 }
 
-function timer(){	
-	decryptBodyText();
+function timer(){
+    decryptBodyText();
     $('textarea,input:text,div[contenteditable=true]').each(function(i, e){
         textarea = $(e);
         if (!textarea.data('found')) {
             textarea.dblclick(function(event){
-				toogleTextboxEncryption($(this));
-			});
+                toogleTextboxEncryption($(this));
+            });
             textarea.data('found', true);
         }
     });
