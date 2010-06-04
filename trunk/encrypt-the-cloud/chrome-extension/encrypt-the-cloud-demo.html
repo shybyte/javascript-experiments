@@ -4,11 +4,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Encrypt the Cloud - Demo</title>
         <script src="../lib/jquery/jquery.js" type="text/javascript"></script>
+		<script src="../lib/jquery/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="../lib/aes.js" type="text/javascript"></script>
+		<script src="../js/utils.js" type="text/javascript"></script>
+		<script src="../js/encrypt-the-cloud.js" type="text/javascript"></script>
+		<script src="content.js" type="text/javascript"></script>
         <script type="text/javascript">
             $(function(){
                 $('#submitComment').click(function(){
                     $('#comments').prepend('<p>' + $('#comment').val() + '</p>');
                 })
+				console.log(window.location.href);
             });
         </script>
 		
@@ -32,19 +38,19 @@
     <body>
     	<div id="page">
     	<h1>Encrypt the Cloud - Demo Page</h1>
-        <textarea id="comment" rows="5" cols="40">Double click in this text box to encrypt this text or press Ctrl+y. Do the same again to decrypt it.</textarea><br/>
+        <textarea id="comment" rows="10" cols="40">Double click in this text box to encrypt this text or press Ctrl+y. Do the same again to decrypt it. Try to decrypt the message of marco by adding him as a friend with key 'test'.</textarea><br/>
         <button id="submitComment">
             Submit
         </button>
         <div id="comments">
             <p>
-                {{marco::Vhv+S1VVVVUDcoK68Wo5tT51YRDVknFLS1IBSQ==}}
+                {{marco::V3MJTOj o6Oj1CG MQwXdbN 4xmKy6a TrMIT07 O0vPFlE S16bI8n w==}}
             </p>
             <p>
-                {{shybyte::68IITIa GhobZGx a4wHXiH ZZzChWp vW9eZkO JYw==}}
+                {{shybyte::8nMJTAk JCQkG+V tCNjA0Q W/PVq0Y SMJIPdv 2c02/a3 zlhTy1t 3oK2Ber htwTCM/ YpgqnEN pMxvEfk IObLBtb mydD8ER 1z8LtKA 6gyHFW/ 9WHqhXl Dx/2+hk yRqfe5v qCfrcnr VlMWH8= }}
             </p>
             <p>
-                {{stefe::D9UITGx sbGzdhq 0POxBE5 kWJ}}
+                {{stefe::S3QJTHV 1dXVaWg YQU5pgI I32q6f+ CXARqct l7IP8ri ODOSAc9 Z+Gv7aG Yfw74b3 uLvcU}}
             </p>
         </div>
 		</div>
