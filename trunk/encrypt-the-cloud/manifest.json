@@ -15,6 +15,9 @@
     "default_title": "Encrypt the Cloud!",
     "default_icon": "chrome-extension/icons/icon-19.png",
     "popup": "chrome-extension/popup.html"
-  }
+  },
+  "permissions": [
+    "tabs"
+  ]
   
 }
