@@ -73,3 +73,8 @@ function trimmedVal(jqueryNode){
 function cleanSitePattern(sitePattern){
 	return sitePattern.replace(/.*\/\//,'');
 }
+
+function domainOf(url){
+	var withoutProtocol = url.replace(/.*\/\//,'')
+	return withoutProtocol.replace(/\/.*/,'');
+}

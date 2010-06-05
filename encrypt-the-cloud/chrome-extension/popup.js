@@ -91,8 +91,17 @@ function initSitesGUI(sites){
         });
     }
     $('#addSiteButton').click(function(){
-        addSiteRow(getSitesTableBody(), "", true);
+        addSiteRow(tableBody, {pattern:''}, true);
     });
+	$('#addCurrentSiteButton').click(function(){
+        addCurrentSite();
+    });
+}
+
+function addCurrentSite(){
+	chrome.tabs.getSelected(null,function (tab){
+		addSiteRow(getSitesTableBody(), {pattern:domainOf(tab.url)}, true);
+	});
 }
 
 

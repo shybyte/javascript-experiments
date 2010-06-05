@@ -10,6 +10,11 @@
         <script type="text/javascript">
             $(document).ready(function(){
 
+                test("domainOf", function(){
+                    equals(domainOf("http://www.google.de"),"www.google.de");
+					equals(domainOf("http://www.google.de/toll/bla"),"www.google.de");
+                });
+
                 test("cleanSitePattern", function(){
                     equals("google", cleanSitePattern("google"));
 					equals("/google", cleanSitePattern("/google"));
