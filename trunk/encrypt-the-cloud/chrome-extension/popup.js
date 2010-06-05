@@ -13,15 +13,15 @@ $(function(){
 
 function saveState(){
     var state = chrome.extension.getBackgroundPage().getState();
-    state.user.key = $("#key").val();
-    state.user.username = $("#username").val();
+    state.user.key = trimmedVal($("#key"));
+    state.user.username = trimmedVal($("#username"));
     state.friends = getFriendsFromUI();
-	state.sites = getSitesFromUI();
+    state.sites = getSitesFromUI();
     chrome.extension.getBackgroundPage().setState(state);
 }
 
 function initDisplay(){
-	var state = chrome.extension.getBackgroundPage().getState();
+    var state = chrome.extension.getBackgroundPage().getState();
     $("#username").val(state.user.username);
     $("#key").val(state.user.key);
     initFriendsGUI(state.friends);
@@ -34,8 +34,8 @@ function getFriendsFromUI(){
     var friends = [];
     $('tr', getFriendsTableBody()).each(function(){
         friends.push({
-            username: $('.username', this).val(),
-            key: $('.key', this).val()
+            username: trimmedVal($('.username', this)),
+            key: trimmedVal($('.key', this))
         });
     });
     return friends;
@@ -47,7 +47,7 @@ function initFriendsGUI(friends){
         addFriendRow(getFriendsTableBody(), ({
             username: '',
             key: ''
-        }));
+        }), true);
     });
 }
 
@@ -56,12 +56,12 @@ function getFriendsTableBody(){
 }
 
 
-function addFriendRow(tableBody, friend){
-    tableBody.append($.nano('<tr><td><input type="text" class="username" value="{username}"></td><td><input type="text" class="key" value="{key}"/></td><td><button class="removeFriendButton">-</button></td></tr>', friend));
-    $('tr:last-child .removeFriendButton', tableBody).click(function(){
-        $(this.parentNode.parentNode).remove();
-    });
+function addFriendRow(tableBody, friend, anim){
+    tableBody.append($.nano('<tr style="-webkit-transform:scale(0.1)"><td><input type="text" class="username" value="{username}"></td><td><input type="text" class="key" value="{key}"/></td><td><button class="removeButton">-</button></td></tr>', friend));
+    initLastRow(tableBody, anim);
 }
+
+
 
 function isEmpty(s){
     return !s || s.match(/^\s*$/);
@@ -72,7 +72,7 @@ function displayFriends(friends){
     if (friends) {
         $.each(friends, function(i, friend){
             if (!isEmpty(friend.username) && !isEmpty(friend.username)) {
-                addFriendRow(tableBody, friend);
+                addFriendRow(tableBody, friend, false);
             }
         });
     }
@@ -86,32 +86,64 @@ function initSitesGUI(sites){
     if (sites) {
         $.each(sites, function(i, site){
             if (!isEmpty(site.pattern)) {
-                addSiteRow(tableBody, site);
+                addSiteRow(tableBody, site, false);
             }
         });
     }
     $('#addSiteButton').click(function(){
-        addSiteRow(getSitesTableBody(), "");
+        addSiteRow(getSitesTableBody(), "", true);
     });
 }
+
 
 function getSitesFromUI(){
     var sites = [];
     $('tr', getSitesTableBody()).each(function(){
-        sites.push({pattern:$('.site', this).val()});
+        var sitePattern = cleanSitePattern(trimmedVal($('.site', this)));
+        sites.push({
+            pattern: sitePattern
+        });
     });
     return sites;
 }
 
-function addSiteRow(tableBody, site){
-    tableBody.append($.nano('<tr><td><input type="text" class="site" value="{pattern}"></td><td><button class="removeButton">-</button></td></tr>', site));
-    $('tr:last-child .removeButton', tableBody).click(function(){
-        $(this.parentNode.parentNode).remove();
-    });
+function addSiteRow(tableBody, site, anim){
+    tableBody.append($.nano('<tr style="-webkit-transform:scale(0.1);"><td><input type="text" class="site" value="{pattern}"></td><td><button class="removeButton">-</button></td></tr>', site));
+	initLastRow(tableBody,anim);
 }
+
 
 function getSitesTableBody(){
     return $('#sitesTable tbody');
+}
+
+
+/* table utils */ 
+
+function showRow(row, anim){
+    if (anim) {
+        window.setTimeout(function(){
+            row.css('webkitTransform', 'scale(1)')
+        }, 10);
+    }
+    else {
+        row.css('webkitTransform', 'scale(1)');
+    }
+}
+
+function initLastRow(tableBody,anim){
+    var row = $('tr:last-child', tableBody);
+    showRow(row, anim);
+    $('.removeButton', row).click(function(){
+        removeRow($(this.parentNode.parentNode));
+    });
+}
+
+function removeRow(row){
+    row.css('webkitTransform', 'scale(0)');
+    window.setTimeout(function(){
+        row.remove()
+    }, 500);
 }
 
 

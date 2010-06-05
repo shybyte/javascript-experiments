@@ -65,3 +65,11 @@ function isSitePatternMatchingLocation(sitePattern, location){
 	    return location.host.indexOf(sitePattern) >= 0;    
 	}
 }
+
+function trimmedVal(jqueryNode){
+	return $.trim(jqueryNode.val());
+}
+
+function cleanSitePattern(sitePattern){
+	return sitePattern.replace(/.*\/\//,'');
+}
