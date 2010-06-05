@@ -173,7 +173,7 @@ function timer(){
                 }
             });
 			textarea.keydown(function(event){
-				console.log(event);
+				//console.log(event);
 				if (encryptTheCloudIsActive && event.ctrlKey && event.keyCode == 89) {
 					toogleTextboxEncryption($(this));
 				}
