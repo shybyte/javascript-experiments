@@ -1,10 +1,15 @@
 package marco.stahl.dinoid.client.model;
 
+import java.util.List;
+
+import marco.stahl.dinoid.client.util.CollectionUtils;
+
 public class GemField {
 	private static final double SPEED = 0.1;
 	private Dimension dimension;
 	private Gem[][] gemes;
-	private double posY;
+	double posY;
+	private List<Vec2Int> changedGems;
 
 	public interface GemFunction {
 		void forGem(int x, int y, Gem gem);
@@ -16,7 +21,9 @@ public class GemField {
 		for (int i = 0; i < dimension.height; i++) {
 			gemes[i] = new Gem[dimension.width];
 		}
+		changedGems = CollectionUtils.newArrayList();
 	}
+
 
 	public void initRandom() {
 		forAllGemes(new GemFunction() {
@@ -80,4 +87,35 @@ public class GemField {
 	public double getPosY() {
 		return posY;
 	}
+
+	public Gem getGem(int x, int y) {
+		return gemes[y][x];
+	}
+
+	public void onShootedGem(int x, int y) {
+		setGem(x, y, nextGem(getGem(x, y)));
+		changedGems.add(new Vec2Int(x, y));
+	}
+
+	private Gem nextGem(Gem gem) {
+		switch (gem) {
+		case GREEN:
+			return Gem.BLUE;
+		case BLUE:
+			return Gem.RED;
+		case RED:
+			return Gem.GREEN;
+		default:
+			throw new IllegalArgumentException("Don't know gem "+gem);
+		}
+	}
+	
+	public List<Vec2Int> getChangedGems() {
+		return changedGems;
+	}
+	
+	void clearChangedGems(){
+		changedGems.clear();
+	}
+	
 }

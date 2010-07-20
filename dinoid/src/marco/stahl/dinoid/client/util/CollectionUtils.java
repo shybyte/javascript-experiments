@@ -11,6 +11,14 @@ public class CollectionUtils {
 	public static <E> ArrayList<E> newArrayList() {
 		return new ArrayList<E>();
 	}
+	
+	public static <E> ArrayList<E> newArrayList(E... elements) {
+		ArrayList<E> newArrayList = newArrayList();
+		for (E e : elements) {
+			newArrayList.add(e);
+		}
+		return newArrayList;
+	}
 
 	public static <K, V> HashMap<K, V> newHashMap() {
 		return new HashMap<K, V>();
