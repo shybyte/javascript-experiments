@@ -14,16 +14,14 @@ import org.junit.Test;
 public class CollisionsDetectorTest {
 
 	private Dimension gemFieldDimension;
-	private Dimension viewDimension;
-	private GemField gemField;
-	private CollisionsDetector collosionsDetector;
+	private GemField gemField = null;
+	private CollisionsDetector collosionsDetector = null;
 	private Collection<Collision> collosions;
 	private Collection<Shot> shots;
 
 	@Before
 	public void setUp() throws Exception {
 		collosionsDetector = new CollisionsDetector();
-		viewDimension = new Dimension(3, 5);
 		gemFieldDimension = new Dimension(3, 3);
 		gemField = new GemField(gemFieldDimension);
 	}
@@ -93,8 +91,8 @@ public class CollisionsDetectorTest {
 		assertThat(collosions, containsInAnyOrder(new Collision(middleShot, 1, 1)));
 	}
 
-	private void givenShots(Shot... shots) {
-		this.shots = CollectionUtils.newArrayList(shots);
+	private void givenShots(Shot... givenShots) {
+		this.shots = CollectionUtils.newArrayList(givenShots);
 	}
 
 	private void givenGemFieldAtPosY(String levelString, double posY) {

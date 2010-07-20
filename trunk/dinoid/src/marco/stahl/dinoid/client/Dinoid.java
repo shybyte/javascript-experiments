@@ -1,7 +1,5 @@
 package marco.stahl.dinoid.client;
 
-import java.util.Date;
-
 import marco.stahl.dinoid.client.model.GemField;
 import marco.stahl.dinoid.client.model.Level;
 import marco.stahl.dinoid.client.model.World;
@@ -15,9 +13,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 public class Dinoid implements EntryPoint {
 	private static final int BLOCK_SIZE = 32;
-	private Date lastTime;
 	private MainView mainView;
 	private World world;
+	private Controller mainController;
 
 	public void onModuleLoad() {
 		initWorld();
@@ -35,16 +33,15 @@ public class Dinoid implements EntryPoint {
 
 	private void initViews() {
 		GemFieldView gemFieldView = new GemFieldView(BLOCK_SIZE, world.getGemField());
-		mainView = new MainView(world, gemFieldView, BLOCK_SIZE);
+		mainView = new MainView(world, gemFieldView, Dinoid.BLOCK_SIZE);
 		RootPanel.get("app").add(mainView);
 	}
 
 	private void initController() {
-		Controller controller = new Controller(mainView, world);
+		mainController = new Controller(mainView, world);
 	}
 
-	private void initTimer() {
-		lastTime = new Date();
+	private void initTimer() {		
 		new Timer() {
 			@Override
 			public void run() {
@@ -54,13 +51,8 @@ public class Dinoid implements EntryPoint {
 	}
 	
 	private void mainLoop() {
-		Date currentTime = new Date();
-		world.move(getTimeDeltaInSeconds(currentTime, lastTime));
-		mainView.refresh();
-		lastTime = currentTime;
+		mainController.timeStep();
 	}
 
-	private double getTimeDeltaInSeconds(Date currentTime, Date lastTime2) {
-		return ((double) (currentTime.getTime() - lastTime2.getTime())) / 1000;
-	}
+
 }

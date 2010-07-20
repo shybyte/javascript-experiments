@@ -62,7 +62,7 @@ public class World {
 		return shotsAboveTop;
 	}
 
-	public void shot(double x, double y) {
+	public void shot(double x) {
 		shots.add(new Shot(Math.floor(x), viewDimension.height, SHOOT_SPEED_Y));
 	}
 

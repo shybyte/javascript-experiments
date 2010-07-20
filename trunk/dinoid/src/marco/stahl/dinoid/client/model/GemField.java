@@ -1,6 +1,5 @@
 package marco.stahl.dinoid.client.model;
 
-import java.util.List;
 import java.util.Set;
 
 import marco.stahl.dinoid.client.util.CollectionUtils;

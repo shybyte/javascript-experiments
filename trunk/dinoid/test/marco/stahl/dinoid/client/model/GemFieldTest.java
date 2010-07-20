@@ -2,21 +2,14 @@ package marco.stahl.dinoid.client.model;
 
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.*;
 import static org.junit.Assert.*;
-
 import marco.stahl.dinoid.client.util.util2d.Dimension;
 import marco.stahl.dinoid.client.util.util2d.Vec2Int;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class GemFieldTest {
 
 	private GemField gemField;
-
-	@Before
-	public void setUp() throws Exception {
-
-	}
 
 	@Test
 	public void testGetMapAsString() {

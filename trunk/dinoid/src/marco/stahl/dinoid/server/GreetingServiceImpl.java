@@ -7,9 +7,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 /**
  * The server side implementation of the RPC service.
  */
-@SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements
 		GreetingService {
+	private static final long serialVersionUID = 1L;
 
 	public String greetServer(String input) throws IllegalArgumentException {
 		// Verify that the input is valid. 
