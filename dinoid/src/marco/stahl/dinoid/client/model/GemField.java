@@ -1,17 +1,19 @@
 package marco.stahl.dinoid.client.model;
 
 import java.util.List;
+import java.util.Set;
 
 import marco.stahl.dinoid.client.util.CollectionUtils;
 import marco.stahl.dinoid.client.util.util2d.Dimension;
 import marco.stahl.dinoid.client.util.util2d.Vec2Int;
 
 public class GemField {
+	private static final int GROUP_SIZE = 3;
 	private static final double SPEED = 0.1;
 	private Dimension dimension;
 	private Gem[][] gemes;
 	double posY;
-	private List<Vec2Int> changedGems;
+	private Set<Vec2Int> changedGems;
 
 	public interface GemFunction {
 		void forGem(int x, int y, Gem gem);
@@ -23,9 +25,8 @@ public class GemField {
 		for (int i = 0; i < dimension.height; i++) {
 			gemes[i] = new Gem[dimension.width];
 		}
-		changedGems = CollectionUtils.newArrayList();
+		changedGems = CollectionUtils.newHasSet();
 	}
-
 
 	public void initRandom() {
 		forAllGemes(new GemFunction() {
@@ -35,26 +36,39 @@ public class GemField {
 			}
 		});
 	}
-	
+
 	public void initFromString(final String s) {
 		forAllGemes(new GemFunction() {
 			@Override
 			public void forGem(int x, int y, Gem gem) {
-				setGem(x, y, gemFromChar(s.charAt(y*dimension.width+x)));
+				setGem(x, y, gemFromChar(s.charAt(y * dimension.width + x)));
 			}
 		});
 	}
 
-	protected Gem gemFromChar(char c) {
+	protected static Gem gemFromChar(char c) {
 		switch (c) {
 		case 'r':
 			return Gem.RED;
 		case 'g':
 			return Gem.GREEN;
 		case 'b':
-			return Gem.BLUE;			
+			return Gem.BLUE;
 		default:
 			return Gem.EMPTY;
+		}
+	}
+
+	protected static char charFromGem(Gem gem) {
+		switch (gem) {
+		case RED:
+			return 'r';
+		case GREEN:
+			return 'g';
+		case BLUE:
+			return 'b';
+		default:
+			return ' ';
 		}
 	}
 
@@ -77,9 +91,9 @@ public class GemField {
 	public void moveToStartPosition() {
 		posY = -dimension.height;
 	}
-	
+
 	public void move(double timeDelta) {
-		posY += timeDelta*SPEED;
+		posY += timeDelta * SPEED;
 	}
 
 	public Dimension getDimension() {
@@ -97,6 +111,61 @@ public class GemField {
 	public void onShootedGem(int x, int y) {
 		setGem(x, y, nextGem(getGem(x, y)));
 		changedGems.add(new Vec2Int(x, y));
+		disolveGroups(x, y);
+	}
+
+	private void disolveGroups(int x, int y) {
+		Gem gem = getGem(x, y);
+		dissolveHorizontal(x, y, gem);
+		dissolveVerticalUpward(x, y, gem);
+	}
+
+	private void dissolveHorizontal(int gemX, int gemY, Gem gem) {
+		int rightBorder = getRightGroupBorder(gemX, gemY, gem);
+		int leftBorder = getLeftGroupBorder(gemX, gemY, gem);
+		if (rightBorder - leftBorder > GROUP_SIZE) {
+			for (int x = leftBorder + 1; x < rightBorder; x++) {
+				removeGem(x, gemY);
+			}
+		}
+	}
+
+	private int getRightGroupBorder(int gemX, int gemY, Gem gem) {
+		int x = gemX + 1;
+		while (x < dimension.width && getGem(x, gemY) == gem) {
+			x++;
+		}
+		return x;
+	}
+
+	private int getLeftGroupBorder(int gemX, int gemY, Gem gem) {
+		int x = gemX - 1;
+		while (x >= 0 && getGem(x, gemY) == gem) {
+			x--;
+		}
+		return x;
+	}
+
+	private void dissolveVerticalUpward(int gemX, int gemY, Gem gem) {
+		int topBorder = getTopGroupBorder(gemX, gemY, gem);
+		if (gemY - topBorder >= GROUP_SIZE) {
+			for (int y = gemY; y > topBorder; y--) {
+				removeGem(gemX, y);
+			}
+		}
+	}
+
+	private int getTopGroupBorder(int gemX, int gemY, Gem gem) {
+		int y = gemY - 1;
+		while (y >= 0 && getGem(gemX, y) == gem) {
+			y--;
+		}
+		return y;
+	}
+
+	private void removeGem(int x, int y) {
+		setGem(x, y, Gem.EMPTY);
+		changedGems.add(new Vec2Int(x, y));
 	}
 
 	private Gem nextGem(Gem gem) {
@@ -108,16 +177,27 @@ public class GemField {
 		case RED:
 			return Gem.GREEN;
 		default:
-			throw new IllegalArgumentException("Don't know gem "+gem);
+			throw new IllegalArgumentException("Don't know gem " + gem);
 		}
 	}
-	
-	public List<Vec2Int> getChangedGems() {
+
+	public Set<Vec2Int> getChangedGems() {
 		return changedGems;
 	}
-	
-	void clearChangedGems(){
+
+	void clearChangedGems() {
 		changedGems.clear();
 	}
-	
+
+	public String getMapAsString() {
+		final StringBuilder sb = new StringBuilder();
+		forAllGemes(new GemFunction() {
+			@Override
+			public void forGem(int x, int y, Gem gem) {
+				sb.append(charFromGem(gem));
+			}
+		});
+		return sb.toString();
+	}
+
 }

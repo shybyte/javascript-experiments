@@ -20,6 +20,6 @@ public class Level {
 	"          " + //	
 	"bgb rgb  b" + //	
 	"bgb rgb  b" + //
-	"         r" + //
+	"       bbr" + //
 	" rgb  rbb ";
 }
