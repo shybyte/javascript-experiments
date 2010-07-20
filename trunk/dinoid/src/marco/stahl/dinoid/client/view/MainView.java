@@ -8,16 +8,13 @@ import marco.stahl.dinoid.client.model.World;
 import marco.stahl.dinoid.client.util.CollectionUtils;
 import marco.stahl.dinoid.client.util.WidgetUtil;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 
-public class MainView extends Composite implements ClickHandler,MouseDownHandler {
+public class MainView extends Composite implements MouseDownHandler {
 
 	private AbsolutePanel panel;
 	private final GemFieldView gemFieldView;
@@ -39,12 +36,12 @@ public class MainView extends Composite implements ClickHandler,MouseDownHandler
 								.asPixelString(toViewCoord(world.getViewDimension().width)),
 						WidgetUtil
 								.asPixelString(toViewCoord(world.getViewDimension().height)));
-		addDomHandler(this, ClickEvent.getType());
 		addDomHandler(this, MouseDownEvent.getType());
 		refresh();
 	}
 
 	public void refresh() {
+		gemFieldView.refresh();
 		panel.setWidgetPosition(gemFieldView, 0, gemFieldView.getPosY());
 		removeUnusedShotImages();
 		paintShots();
@@ -64,7 +61,7 @@ public class MainView extends Composite implements ClickHandler,MouseDownHandler
 		for (Shot shot : world.getShots()) {
 			Image shotImage = getOrCreateShotImage(shot);
 			setImagePositionFromWorldPosition(shotImage, shot.getX(), shot
-					.getY());
+					.getY()-0.5);
 		}
 	}
 
@@ -95,20 +92,16 @@ public class MainView extends Composite implements ClickHandler,MouseDownHandler
 		return new Image("images/ball_32.png");
 	}
 
-	@Override
-	public void onClick(ClickEvent event) {
-		int mx = event.getNativeEvent().getClientX() - this.getAbsoluteLeft();
-		int my = event.getNativeEvent().getClientY() - this.getAbsoluteTop();
-		shot(mx, my);
-		event.preventDefault();
-	}
-
 	private void shot(int mx, int my) {
 		world.shot(toModelCoord(mx), toModelCoord(my));
 	}
 
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
+		int mx = event.getNativeEvent().getClientX() - this.getAbsoluteLeft();
+		int my = event.getNativeEvent().getClientY() - this.getAbsoluteTop();
+		shot(mx, my);
+		event.preventDefault();
 		event.preventDefault();
 	}
 }

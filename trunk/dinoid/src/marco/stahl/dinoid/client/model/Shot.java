@@ -24,4 +24,11 @@ public class Shot {
 	public void move(double timeDelta) {
 		y += speedY*timeDelta;
 	}
+
+	@Override
+	public String toString() {
+		return "Shot [x=" + x + ", y=" + y +"]";
+	}
+	
+	
 }
