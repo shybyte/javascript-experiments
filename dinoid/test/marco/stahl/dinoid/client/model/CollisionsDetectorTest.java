@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.util.Collection;
 
 import marco.stahl.dinoid.client.util.CollectionUtils;
+import marco.stahl.dinoid.client.util.util2d.Dimension;
 
 import org.junit.Before;
 import org.junit.Test;
