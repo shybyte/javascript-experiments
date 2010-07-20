@@ -80,8 +80,19 @@ public class GemFieldView extends Composite {
 		for (Vec2Int changedGem : gemField.getChangedGems()) {
 			int x = changedGem.x;
 			int y = changedGem.y;
-			String newImageFileName = getGemImageFilename(gemField.getGem(x, y));
-			images.get(x, y).setUrl(newImageFileName);
+			Gem gem = gemField.getGem(x, y);
+			if (gem == Gem.EMPTY) {
+				removedGemImage(x,y);
+			} else {
+				String newImageFileName = getGemImageFilename(gem);
+				images.get(x, y).setUrl(newImageFileName);
+			}
 		}
+	}
+
+	private void removedGemImage(int x, int y) {
+		Image image = images.get(x, y);
+		images.set(x, y, null);
+		panel.remove(image);
 	}
 }
