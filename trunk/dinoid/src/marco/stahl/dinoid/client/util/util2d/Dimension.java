@@ -1,4 +1,4 @@
-package marco.stahl.dinoid.client.model;
+package marco.stahl.dinoid.client.util.util2d;
 
 public class Dimension {
 	public int width;

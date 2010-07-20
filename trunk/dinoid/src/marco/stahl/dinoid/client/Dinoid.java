@@ -2,10 +2,10 @@ package marco.stahl.dinoid.client;
 
 import java.util.Date;
 
-import marco.stahl.dinoid.client.model.Dimension;
 import marco.stahl.dinoid.client.model.GemField;
 import marco.stahl.dinoid.client.model.Level;
 import marco.stahl.dinoid.client.model.World;
+import marco.stahl.dinoid.client.util.util2d.Dimension;
 import marco.stahl.dinoid.client.view.GemFieldView;
 import marco.stahl.dinoid.client.view.MainView;
 

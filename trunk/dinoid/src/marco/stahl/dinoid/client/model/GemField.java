@@ -3,6 +3,8 @@ package marco.stahl.dinoid.client.model;
 import java.util.List;
 
 import marco.stahl.dinoid.client.util.CollectionUtils;
+import marco.stahl.dinoid.client.util.util2d.Dimension;
+import marco.stahl.dinoid.client.util.util2d.Vec2Int;
 
 public class GemField {
 	private static final double SPEED = 0.1;

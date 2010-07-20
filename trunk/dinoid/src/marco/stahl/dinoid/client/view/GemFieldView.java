@@ -2,10 +2,10 @@ package marco.stahl.dinoid.client.view;
 
 import marco.stahl.dinoid.client.model.Gem;
 import marco.stahl.dinoid.client.model.GemField;
-import marco.stahl.dinoid.client.model.Vec2Int;
 import marco.stahl.dinoid.client.model.GemField.GemFunction;
-import marco.stahl.dinoid.client.util.Array2D;
 import marco.stahl.dinoid.client.util.WidgetUtil;
+import marco.stahl.dinoid.client.util.util2d.Array2D;
+import marco.stahl.dinoid.client.util.util2d.Vec2Int;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;

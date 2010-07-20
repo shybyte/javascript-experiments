@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import marco.stahl.dinoid.client.util.CollectionUtils;
+import marco.stahl.dinoid.client.util.util2d.Dimension;
 
 public class World {
 	private static final int SHOOT_SPEED_Y = -10;

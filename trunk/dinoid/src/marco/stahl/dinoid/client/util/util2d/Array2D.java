@@ -1,8 +1,8 @@
-package marco.stahl.dinoid.client.util;
+package marco.stahl.dinoid.client.util.util2d;
 
 import java.util.List;
 
-import marco.stahl.dinoid.client.model.Dimension;
+import marco.stahl.dinoid.client.util.CollectionUtils;
 
 
 public class Array2D<T> {
