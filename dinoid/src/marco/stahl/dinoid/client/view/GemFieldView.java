@@ -73,24 +73,25 @@ public class GemFieldView extends Composite {
 	}
 
 	private int getPixelSize(double posY) {
-		return (int) (((double) blockSize) * posY);
+		return (int) (blockSize * posY);
 	}
 
 	public void refresh() {
 		for (Vec2Int changedGem : gemField.getChangedGems()) {
-			int x = changedGem.x;
-			int y = changedGem.y;
-			Gem gem = gemField.getGem(x, y);
-			if (gem == Gem.EMPTY) {
-				removedGemImage(x,y);
-			} else {
-				String newImageFileName = getGemImageFilename(gem);
-				images.get(x, y).setUrl(newImageFileName);
-			}
+			refreshGem(changedGem.x, changedGem.y);
 		}
 	}
 
-	private void removedGemImage(int x, int y) {
+	private void refreshGem(int x, int y) {
+		Gem gem = gemField.getGem(x, y);
+		if (gem == Gem.EMPTY) {
+			removeGemImage(x,y);
+		} else {
+			images.get(x, y).setUrl(getGemImageFilename(gem));
+		}
+	}
+
+	private void removeGemImage(int x, int y) {
 		Image image = images.get(x, y);
 		images.set(x, y, null);
 		panel.remove(image);

@@ -92,16 +92,14 @@ public class MainView extends Composite implements MouseDownHandler {
 		return new Image("images/ball_32.png");
 	}
 
-	private void shot(int mx, int my) {
-		world.shot(toModelCoord(mx), toModelCoord(my));
+	private void shot(int mx) {
+		world.shot(toModelCoord(mx));
 	}
 
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
 		int mx = event.getNativeEvent().getClientX() - this.getAbsoluteLeft();
-		int my = event.getNativeEvent().getClientY() - this.getAbsoluteTop();
-		shot(mx, my);
-		event.preventDefault();
+		shot(mx);
 		event.preventDefault();
 	}
 }

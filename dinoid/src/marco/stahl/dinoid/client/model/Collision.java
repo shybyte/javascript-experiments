@@ -42,7 +42,10 @@ public class Collision {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Collision other = (Collision) obj;
+		return equals((Collision) obj);
+	}
+
+	private boolean equals(Collision other) {
 		if (gemFieldX != other.gemFieldX)
 			return false;
 		if (gemFieldY != other.gemFieldY)
