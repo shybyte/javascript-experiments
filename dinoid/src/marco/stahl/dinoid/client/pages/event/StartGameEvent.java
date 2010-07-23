@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.GwtEvent;
 
 public class StartGameEvent extends GwtEvent<StartGameEventHandler>{
 
-	public static Type<StartGameEventHandler> TYPE = new Type<StartGameEventHandler>();
+	public static final Type<StartGameEventHandler> TYPE = new Type<StartGameEventHandler>();
 	
 	@Override
 	protected void dispatch(StartGameEventHandler handler) {
