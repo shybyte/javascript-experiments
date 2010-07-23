@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.GwtEvent;
 
 public class GameFinishedEvent extends GwtEvent<GameFinishedEventHandler>{
 
-	public static Type<GameFinishedEventHandler> TYPE = new Type<GameFinishedEventHandler>();
+	public static final Type<GameFinishedEventHandler> TYPE = new Type<GameFinishedEventHandler>();
 	
 	@Override
 	protected void dispatch(GameFinishedEventHandler handler) {
