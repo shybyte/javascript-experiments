@@ -3,7 +3,10 @@ body {
 	background-color: #333;
 }
 
-.mainView {	
+#app {	
 	background: #000;
 	margin: 2em auto;
+	width: 320px;
+	text-align:center;
+	height: 384px;
 }
