@@ -77,4 +77,8 @@ public class World {
 	public List<Shot> getShots() {
 		return shots;
 	}
+	
+	public boolean isGameLost() {
+		return false;
+	}
 }

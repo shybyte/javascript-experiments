@@ -1,58 +1,73 @@
 package marco.stahl.dinoid.client;
 
-import marco.stahl.dinoid.client.model.GemField;
-import marco.stahl.dinoid.client.model.Level;
-import marco.stahl.dinoid.client.model.World;
-import marco.stahl.dinoid.client.util.util2d.Dimension;
-import marco.stahl.dinoid.client.view.GemFieldView;
-import marco.stahl.dinoid.client.view.MainView;
+import marco.stahl.dinoid.client.pages.GameViewPage;
+import marco.stahl.dinoid.client.pages.HiscorePage;
+import marco.stahl.dinoid.client.pages.StartPage;
+import marco.stahl.dinoid.client.pages.event.GameFinishedEvent;
+import marco.stahl.dinoid.client.pages.event.GameFinishedEventHandler;
+import marco.stahl.dinoid.client.pages.event.StartGameEvent;
+import marco.stahl.dinoid.client.pages.event.StartGameEventHandler;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class Dinoid implements EntryPoint {
-	private static final int BLOCK_SIZE = 32;
-	private MainView mainView;
-	private World world;
-	private Controller mainController;
-
-	public void onModuleLoad() {
-		initWorld();
-		initViews();
-		initController();
-		initTimer();
-	}
-
-	private void initWorld() {
-		final GemField gemField = new GemField(new Dimension(10, 20));
-		gemField.initFromString(Level.level1);
-		gemField.moveToStartPosition();
-		world = new World(new Dimension(10, 12), gemField);
-	}
-
-	private void initViews() {
-		GemFieldView gemFieldView = new GemFieldView(BLOCK_SIZE, world.getGemField());
-		mainView = new MainView(world, gemFieldView, Dinoid.BLOCK_SIZE);
-		RootPanel.get("app").add(mainView);
-	}
-
-	private void initController() {
-		mainController = new Controller(mainView, world);
-	}
-
-	private void initTimer() {		
-		new Timer() {
-			@Override
-			public void run() {
-				mainLoop();
-			}
-		}.scheduleRepeating(25);
+public class Dinoid implements EntryPoint,GameFinishedEventHandler,StartGameEventHandler {
+	private enum State {
+		START_SCREEN,GAME,HISCORE
 	}
 	
-	private void mainLoop() {
-		mainController.timeStep();
+	private State state = State.START_SCREEN;
+	private HandlerManager eventBus;
+
+	public void onModuleLoad() {
+		eventBus = new HandlerManager(null);
+		addHandler();
+		changeState(State.START_SCREEN);
 	}
 
+	private void addHandler() {
+		eventBus.addHandler(GameFinishedEvent.TYPE, this);
+		eventBus.addHandler(StartGameEvent.TYPE, this);
+	}
+	
+	private void showPageForCurrentState() {
+		setPage(getPageForCurrentState());
+	}
+
+	private Widget getPageForCurrentState() {
+		switch (state) {
+		case START_SCREEN:	
+			return new StartPage(eventBus);
+		case GAME:	
+			return new GameViewPage(eventBus);		
+		case HISCORE:	
+			return new HiscorePage();				
+		default:
+			throw new IllegalStateException("Don't know state "+state);
+		}
+	}
+
+	private void setPage(Widget page) {
+		RootPanel.get("app").clear();
+		RootPanel.get("app").add(page);
+	}
+
+	private void changeState(State newState) {
+		this.state = newState;
+		showPageForCurrentState();
+	}
+	
+	@Override
+	public void onGameFinished(GameFinishedEvent gameFinishedEvent) {
+		changeState(State.HISCORE);
+	}
+
+	@Override
+	public void onStartGame(StartGameEvent event) {
+		changeState(State.GAME);
+	}
+	
 
 }
