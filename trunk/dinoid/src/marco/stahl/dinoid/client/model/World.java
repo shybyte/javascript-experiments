@@ -28,7 +28,8 @@ public class World {
 	}
 
 	private void handleCollosions() {
-		Collection<Collision> collosions = collosionsDetector.detectCollisions(gemField, shots);
+		Collection<Collision> collosions = collosionsDetector.detectCollisions(
+				gemField, shots);
 		removeCollidedShots(collosions);
 		changeCollidedGems(collosions);
 	}
@@ -36,7 +37,8 @@ public class World {
 	private void changeCollidedGems(Collection<Collision> collosions) {
 		gemField.clearChangedGems();
 		for (Collision collosion : collosions) {
-			gemField.onShootedGem(collosion.getGemFieldX(),collosion.getGemFieldY());
+			gemField.onShootedGem(collosion.getGemFieldX(), collosion
+					.getGemFieldY());
 		}
 	}
 
@@ -77,8 +79,8 @@ public class World {
 	public List<Shot> getShots() {
 		return shots;
 	}
-	
+
 	public boolean isGameLost() {
-		return false;
+		return gemField.getBottomGemPosY() > viewDimension.height - 1;
 	}
 }

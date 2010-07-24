@@ -53,7 +53,7 @@ public class GameViewPage extends Composite{
 				mainLoop();
 			}
 		};
-		timer.scheduleRepeating(25);
+		timer.scheduleRepeating(20);
 	}
 	
 	private void mainLoop() {
