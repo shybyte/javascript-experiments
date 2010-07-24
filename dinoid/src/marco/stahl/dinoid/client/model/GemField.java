@@ -27,48 +27,13 @@ public class GemField {
 		changedGems = CollectionUtils.newHasSet();
 	}
 
-	public void initRandom() {
-		forAllGemes(new GemFunction() {
-			@Override
-			public void forGem(int x, int y, Gem gem) {
-				setGem(x, y, randomGem());
-			}
-		});
-	}
-
 	public void initFromString(final String s) {
 		forAllGemes(new GemFunction() {
 			@Override
 			public void forGem(int x, int y, Gem gem) {
-				setGem(x, y, gemFromChar(s.charAt(y * dimension.width + x)));
+				setGem(x, y, GemFieldSerializer.gemFromChar(s.charAt(y * dimension.width + x)));
 			}
 		});
-	}
-
-	protected static Gem gemFromChar(char c) {
-		switch (c) {
-		case 'r':
-			return Gem.RED;
-		case 'g':
-			return Gem.GREEN;
-		case 'b':
-			return Gem.BLUE;
-		default:
-			return Gem.EMPTY;
-		}
-	}
-
-	protected static char charFromGem(Gem gem) {
-		switch (gem) {
-		case RED:
-			return 'r';
-		case GREEN:
-			return 'g';
-		case BLUE:
-			return 'b';
-		default:
-			return ' ';
-		}
 	}
 
 	public void setGem(int x, int y, Gem gem) {
@@ -108,7 +73,7 @@ public class GemField {
 	}
 
 	public void onShootedGem(int x, int y) {
-		setGem(x, y, nextGem(getGem(x, y)));
+		setGem(x, y, Gem.nextGem(getGem(x, y)));
 		changedGems.add(new Vec2Int(x, y));
 		disolveGroups(x, y);
 	}
@@ -167,19 +132,6 @@ public class GemField {
 		changedGems.add(new Vec2Int(x, y));
 	}
 
-	private Gem nextGem(Gem gem) {
-		switch (gem) {
-		case GREEN:
-			return Gem.BLUE;
-		case BLUE:
-			return Gem.RED;
-		case RED:
-			return Gem.GREEN;
-		default:
-			throw new IllegalArgumentException("Don't know gem " + gem);
-		}
-	}
-
 	public Set<Vec2Int> getChangedGems() {
 		return changedGems;
 	}
@@ -193,7 +145,7 @@ public class GemField {
 		forAllGemes(new GemFunction() {
 			@Override
 			public void forGem(int x, int y, Gem gem) {
-				sb.append(charFromGem(gem));
+				sb.append(GemFieldSerializer.charFromGem(gem));
 			}
 		});
 		return sb.toString();
@@ -202,11 +154,17 @@ public class GemField {
 	public double getBottomGemPosY() {
 		double maxY = Double.MIN_VALUE;
 		for (int x = 0; x < dimension.width; x++) {
-			for (int y = dimension.height - 1; y >= 0 && isEmpty(x, y); y--) {
-				maxY = Math.max(maxY, y);
-			}
+			maxY = Math.max(maxY, getBottomGemPoxYForColumn(x));
 		}
-		return maxY + posY;
+		return maxY + posY + 1;
+	}
+
+	private int getBottomGemPoxYForColumn(int x) {
+		int y = dimension.height - 1;
+		while (y >= 0 && isEmpty(x, y)) {
+			y--;
+		}
+		return y;
 	}
 
 	private boolean isEmpty(int x, int y) {

@@ -2,24 +2,24 @@ package marco.stahl.dinoid.client.model;
 
 public class Level {
 	public final static String level1 = ""+//
-	"rgb rgb  r" + //
-	"         r" + //
-	"bgb rgb  b" + //
+	"rgb rgb rb" + //
+	"        rb" + //
+	"bgb rgb br" + //
 	"          " + //
-	"rgb rgb  r" + //
-	"         r" + //
-	"bgb rgb  b" + //
-	"          " + //
-	"rgb rgb  r" + //
-	"         r" + //
-	"bgb rgb  b" + //
-	"          " + //	
-	"bgb rgb  b" + //
-	"         b" + //
-	"bgb rgb  r" + //
-	"          " + //	
-	"bgb rgb  b" + //	
-	"bgb rgb  b" + //
+	" ggrr     " + //
+	"rgb      r" + //
+	"    rbb  r" + //
+	" bgb rgb b" + //
+	"   rgbg   " + //	
+	"bgb     g " + //
+	"     b  g " + //
+	"bbgb b  b " + //
+	"b   rgrr  " + //	
+	"g   rgb  b" + //	
+	" gbrgb   b" + //
 	"       bbr" + //
-	" rgb  rbb ";
+	" rbb  rbb " + //
+	"rgb      r" + //
+	" rgb     r" + //
+	"bgb rgb  b";
 }
