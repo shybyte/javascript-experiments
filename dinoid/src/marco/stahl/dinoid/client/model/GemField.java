@@ -8,7 +8,7 @@ import marco.stahl.dinoid.client.util.util2d.Vec2Int;
 
 public class GemField {
 	private static final int GROUP_SIZE = 3;
-	private static final double SPEED = 0.1;
+	private static final double SPEED = 0.2;
 	private Dimension dimension;
 	private Gem[][] gemes;
 	double posY;
@@ -197,6 +197,20 @@ public class GemField {
 			}
 		});
 		return sb.toString();
+	}
+
+	public double getBottomGemPosY() {
+		double maxY = Double.MIN_VALUE;
+		for (int x = 0; x < dimension.width; x++) {
+			for (int y = dimension.height - 1; y >= 0 && isEmpty(x, y); y--) {
+				maxY = Math.max(maxY, y);
+			}
+		}
+		return maxY + posY;
+	}
+
+	private boolean isEmpty(int x, int y) {
+		return getGem(x, y) == Gem.EMPTY;
 	}
 
 }

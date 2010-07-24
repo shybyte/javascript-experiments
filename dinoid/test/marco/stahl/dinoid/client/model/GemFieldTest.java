@@ -9,6 +9,7 @@ import org.junit.Test;
 
 public class GemFieldTest {
 
+	private static final double EQUAL_DOUBLE_DELTA = 0.0001;
 	private GemField gemField;
 
 	@Test
@@ -126,6 +127,22 @@ public class GemFieldTest {
 		assertThat(gemField.getChangedGems(), containsInAnyOrder(new Vec2Int(0,
 				0), new Vec2Int(0, 1), new Vec2Int(0, 2), new Vec2Int(1, 2),
 				new Vec2Int(2, 2)));
+	}
+	
+	@Test
+	public void testGetBottomGemPosY() {
+		
+		givenAGemField(3, "" + //
+				"gb " + //
+				" b " + //
+				"   ");
+
+		gemField.posY = -1 ;
+		
+		double lowestGemPosY = gemField.getBottomGemPosY();
+		
+		assertEquals(1, lowestGemPosY,EQUAL_DOUBLE_DELTA);
+		
 	}
 
 	public void assertGemField(String expectedGameFieldString) {

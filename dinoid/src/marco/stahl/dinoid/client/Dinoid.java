@@ -7,13 +7,15 @@ import marco.stahl.dinoid.client.pages.event.GameFinishedEvent;
 import marco.stahl.dinoid.client.pages.event.GameFinishedEventHandler;
 import marco.stahl.dinoid.client.pages.event.StartGameEvent;
 import marco.stahl.dinoid.client.pages.event.StartGameEventHandler;
+import marco.stahl.dinoid.client.pages.event.StartPageEvent;
+import marco.stahl.dinoid.client.pages.event.StartPageEventHandler;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Dinoid implements EntryPoint,GameFinishedEventHandler,StartGameEventHandler {
+public class Dinoid implements EntryPoint,GameFinishedEventHandler,StartGameEventHandler,StartPageEventHandler {
 	private enum State {
 		START_SCREEN,GAME,HISCORE
 	}
@@ -30,6 +32,7 @@ public class Dinoid implements EntryPoint,GameFinishedEventHandler,StartGameEven
 	private void addHandler() {
 		eventBus.addHandler(GameFinishedEvent.TYPE, this);
 		eventBus.addHandler(StartGameEvent.TYPE, this);
+		eventBus.addHandler(StartPageEvent.TYPE, this);
 	}
 	
 	private void showPageForCurrentState() {
@@ -43,7 +46,7 @@ public class Dinoid implements EntryPoint,GameFinishedEventHandler,StartGameEven
 		case GAME:	
 			return new GameViewPage(eventBus);		
 		case HISCORE:	
-			return new HiscorePage();				
+			return new HiscorePage(eventBus);				
 		default:
 			throw new IllegalStateException("Don't know state "+state);
 		}
@@ -67,6 +70,11 @@ public class Dinoid implements EntryPoint,GameFinishedEventHandler,StartGameEven
 	@Override
 	public void onStartGame(StartGameEvent event) {
 		changeState(State.GAME);
+	}
+
+	@Override
+	public void onStartPage(StartPageEvent event) {
+		changeState(State.START_SCREEN);
 	}
 	
 
