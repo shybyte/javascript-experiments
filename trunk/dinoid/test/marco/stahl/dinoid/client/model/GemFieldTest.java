@@ -135,6 +135,8 @@ public class GemFieldTest {
 		givenAGemField(3, "" + //
 				"gb " + //
 				" b " + //
+				"   " + //
+				"   " + //
 				"   ");
 
 		gemField.posY = -1 ;

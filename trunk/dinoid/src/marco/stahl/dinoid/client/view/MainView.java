@@ -30,14 +30,18 @@ public class MainView extends Composite implements MouseDownHandler {
 		initWidget(panel);
 		panel.add(gemFieldView);
 		panel.addStyleName("mainView");
+		setPanelSizeFromWorldDimension(world);
+		addDomHandler(this, MouseDownEvent.getType());
+		refresh();
+	}
+
+	private void setPanelSizeFromWorldDimension(World world) {
 		panel
 				.setSize(
 						WidgetUtil
 								.asPixelString(toViewCoord(world.getViewDimension().width)),
 						WidgetUtil
 								.asPixelString(toViewCoord(world.getViewDimension().height)));
-		addDomHandler(this, MouseDownEvent.getType());
-		refresh();
 	}
 
 	public void refresh() {

@@ -81,6 +81,6 @@ public class World {
 	}
 
 	public boolean isGameLost() {
-		return gemField.getBottomGemPosY() > viewDimension.height - 1;
+		return gemField.getBottomGemPosY() > viewDimension.height;
 	}
 }
