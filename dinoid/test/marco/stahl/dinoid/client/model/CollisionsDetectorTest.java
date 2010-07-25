@@ -8,6 +8,7 @@ import java.util.Collection;
 import marco.stahl.dinoid.client.util.CollectionUtils;
 import marco.stahl.dinoid.client.util.util2d.Dimension;
 
+import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,70 +26,89 @@ public class CollisionsDetectorTest {
 		gemFieldDimension = new Dimension(3, 3);
 		gemField = new GemField(gemFieldDimension);
 	}
-	
+
 	@Test
 	public void testShotAboveGem() {
 		givenGemFieldAtPosY("" + //
 				"r  " + //
 				"gg " + //
 				"g b", 0);
-		
-		Shot middleShot = shot(1,0 );
+
+		Shot middleShot = shot(1, 0);
 		givenShots(middleShot);
 
 		collosions = collosionsDetector.detectCollisions(gemField, shots);
 
-		assertThat(collosions, containsInAnyOrder(new Collision(middleShot, 1, 1)));
+		assertThat(collosions, containsInAnyOrder(new Collision(middleShot, 1,
+				1)));
 	}
-	
+
 	@Test
 	public void testShotAboveGemField() {
 		givenGemFieldAtPosY("" + //
 				"r  " + //
 				"g  " + //
 				"g b", 0);
-		
-		Shot middleShot = shot(1,-1 );
-		Shot rightShot = shot(2,-1 );
-		givenShots(middleShot,rightShot);
+
+		Shot middleShot = shot(1, 0);
+		Shot rightShot = shot(2, 0);
+		givenShots(middleShot, rightShot);
 
 		collosions = collosionsDetector.detectCollisions(gemField, shots);
 
-		assertThat(collosions, containsInAnyOrder(new Collision(rightShot, 2, 2)));
+		assertThat(collosions,
+				containsInAnyOrder(new Collision(rightShot, 2, 2)));
 	}
 
 	@Test
-	public void testDetectCollections() {
+	public void testDetectCollisions() {
 		givenGemFieldAtPosY("" + //
 				"r  " + //
 				"gg " + //
 				"g b", 0);
-		
+
 		Shot leftShot = shot(0, 2);
 		Shot leftShotNoCollision = shot(0, 3);
-		Shot middleShot = shot(1,0 );
-		givenShots(leftShot,leftShotNoCollision,middleShot);
+		Shot middleShot = shot(1, 0);
+		givenShots(leftShot, leftShotNoCollision, middleShot);
 
 		collosions = collosionsDetector.detectCollisions(gemField, shots);
 
-		assertThat(collosions, containsInAnyOrder(new Collision(leftShot, 0, 2),new Collision(middleShot, 1, 1)));
+		assertThat(collosions, containsInAnyOrder(
+				new Collision(leftShot, 0, 2), new Collision(middleShot, 1, 1)));
 	}
-	
+
 	@Test
-	public void testDetectCollectionsWithPosY() {
+	public void testDetectCollissionsWithPosY() {
 		givenGemFieldAtPosY("" + //
 				"r  " + //
 				"gg " + //
 				"g b", -1);
-		
+
 		Shot leftShot = shot(0, 2);
 		Shot leftShotNoCollision = shot(0, 4);
-		Shot middleShot = shot(1,0 );
-		givenShots(leftShot,leftShotNoCollision,middleShot);
+		Shot middleShot = shot(1, 0);
+		givenShots(leftShot, leftShotNoCollision, middleShot);
 
 		collosions = collosionsDetector.detectCollisions(gemField, shots);
 
-		assertThat(collosions, containsInAnyOrder(new Collision(middleShot, 1, 1)));
+		assertThat(collosions, containsInAnyOrder(new Collision(middleShot, 1,
+				1)));
+	}
+
+	@Test
+	public void testDoNotDetectCollissionsForShotThatLeftScreen() {
+		givenGemFieldAtPosY("" + //
+				"r  " + //
+				"gg " + //
+				"g b", -3);
+
+		Shot leftShot = shot(0, -0.01);
+		givenShots(leftShot);
+
+		collosions = collosionsDetector.detectCollisions(gemField, shots);
+
+		assertThat(collosions, IsEmptyCollection.<Collision> empty());
 	}
 
 	private void givenShots(Shot... givenShots) {

@@ -20,6 +20,14 @@ public class CollisionsDetector {
 	}
 
 	private Collision detectCollision(GemField gemField, Shot shot) {
+		if (shot.getY() < 0) {
+			return null;
+		} 
+		return detectCollisionForVisibleShots(gemField, shot);
+	}
+
+	private Collision detectCollisionForVisibleShots(GemField gemField,
+			Shot shot) {
 		int shotX = (int) shot.getX();
 		int shotY = (int) (shot.getY() - gemField.posY);
 		int minY = Math.max(shotY, 0);
