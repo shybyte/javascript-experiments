@@ -23,6 +23,9 @@ public class GemField {
 		gemes = new Gem[dimension.height][];
 		for (int i = 0; i < dimension.height; i++) {
 			gemes[i] = new Gem[dimension.width];
+			for (int x = 0; x < dimension.width; x++) {
+				gemes[i][x]=Gem.EMPTY;
+			}
 		}
 		changedGems = CollectionUtils.newHasSet();
 	}
@@ -31,7 +34,8 @@ public class GemField {
 		forAllGemes(new GemFunction() {
 			@Override
 			public void forGem(int x, int y, Gem gem) {
-				setGem(x, y, GemFieldSerializer.gemFromChar(s.charAt(y * dimension.width + x)));
+				setGem(x, y, GemFieldSerializer.gemFromChar(s.charAt(y
+						* dimension.width + x)));
 			}
 		});
 	}
@@ -46,10 +50,6 @@ public class GemField {
 				gemFunction.forGem(x, y, gemes[y][x]);
 			}
 		}
-	}
-
-	private Gem randomGem() {
-		return Gem.values()[(int) (Math.random() * Gem.values().length)];
 	}
 
 	public void moveToStartPosition() {
@@ -149,6 +149,17 @@ public class GemField {
 			}
 		});
 		return sb.toString();
+	}
+
+	public void printMapAsPrettyString() {
+		String mapString = getMapAsString();
+		for (int i = 0; i < mapString.length(); i++) {
+			System.out.print(mapString.charAt(i));
+			if (i % dimension.width == 0 && i > 0) {
+				System.out.print("\n");
+			}
+		}
+		System.out.print("\n");
 	}
 
 	public double getBottomGemPosY() {
