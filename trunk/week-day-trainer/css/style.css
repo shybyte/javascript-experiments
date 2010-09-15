@@ -215,6 +215,66 @@ button {  width: auto; overflow: visible; }
     Author: 
  */
 
+body {
+  font-size: 14px;
+}
+
+#container {
+  margin: 2em auto;
+  padding: 1em;
+  border: 1px solid #CCC;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  display: table;
+}
+
+h1 {
+  font-size: 1.5em;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.formRow {
+  margin-bottom: 0.5em;
+}
+
+label {
+  color: #888;
+  display:block;
+}
+
+
+
+label.radioLabel {
+  color: #333;
+  display:inline;
+  vertical-align: middle; 
+  margin: 0px 0.5em 0 0;
+}
+
+.answerRow{
+  margin-bottom: 0.3em;
+}
+
+.answerRow button{
+  width: 100%;
+}
+
+#question {
+  font-weight: bold;
+  text-align: center;
+  font-size: 2em;
+}
+
+#currentRoundLabel {
+  text-align: center;
+}
+
+#quitButton {
+  margin-top: 1em;
+  opacity: 0.8;
+  font-size: 0.8em;
+}
 
 
 

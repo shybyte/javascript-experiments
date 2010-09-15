@@ -12,7 +12,7 @@
        Remove this if you use the .htaccess -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title></title>
+  <title>Week Day Trainer</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -40,16 +40,35 @@
 
   <div id="container">
     <header>
-
+      <h1>Week Day Trainer</h1>
     </header>
     
     <div id="main">      
       
-      <input id="2010_2011" type="radio" name="range" value="2010-2011" checked="checked"/><label for="2010_2011">2010-2011</label>
-      <input id="1800_2099" type="radio" name="range" value="1800-2099"/><label for="1800_2099">1800-2099</label>
-      <button id="startButton">Start</button>
+      <div id="gameSettings">
+        <div class="formRow">
+          <label>Range Of Years:</label>      
+          <div>    
+            <input id="2010_2011" type="radio" name="range" value="2010-2011" checked="checked"/> <label class="radioLabel" for="2010_2011">2010-2011</label>
+            <input id="1800_2099" type="radio" name="range" value="1800-2099"/> <label class="radioLabel" for="1800_2099">1800-2099</label>
+          </div>
+        </div>
+        <div class="formRow">
+          <label for="rounds">Rounds:</label>
+          <input type="text" id="rounds" name="rounds" value="5" size="4"/><br/>
+        </div>
+        <button id="startButton">Start</button>
+      </div>
       
-      <div id="question"></div>
+      <div id="game" style="display:none;">
+        <div id="question" ></div>
+        
+        <div id="answerButtons">
+            
+        </div>
+        <div id="currentRoundLabel">1 / 3</div>
+        <button id="quitButton">Quit</button>
+      </div>
       
     </div>
     
