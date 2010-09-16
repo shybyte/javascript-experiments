@@ -91,6 +91,15 @@ function start(){
     startTime = getTime();
     rounds = $('#rounds').val();
     showNextQuestion();
+    showStatistics();
+}
+
+function showStatistics(){
+  var stats = loadStatisticsForRange();
+  var table = $('#statisticsTable');
+  jQuery.each(stats,function (i,stat){
+    table.append("<td>"+stat.time+'</td><td>'+stat.timePerDay+'</td>');
+  });
 }
 
 function quit(){
