@@ -243,13 +243,15 @@ label {
   display:block;
 }
 
-
-
 label.radioLabel {
   color: #333;
   display:inline;
   vertical-align: middle; 
   margin: 0px 0.5em 0 0;
+}
+
+#startButton {
+  margin-bottom: 0.4em;
 }
 
 .answerRow{
@@ -276,7 +278,22 @@ label.radioLabel {
   font-size: 0.8em;
 }
 
+h2 {
+  font-size: 1.2em;
+  text-align: center;
+  margin-bottom: 0.5em;
+  margin-top: 0.1em;
+}
 
+#statisticsTable {
+  width: 100%;
+}
+
+#statisticsTable td,
+#statisticsTable th
+{
+  border: 1px solid silver;
+}
 
 
 
