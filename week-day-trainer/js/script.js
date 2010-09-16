@@ -91,15 +91,21 @@ function start(){
     startTime = getTime();
     rounds = $('#rounds').val();
     showNextQuestion();
-    showStatistics();
 }
 
 function showStatistics(){
   var stats = loadStatisticsForRange();
   var table = $('#statisticsTable');
+  $('td',table).remove();
   jQuery.each(stats,function (i,stat){
-    table.append("<td>"+stat.time+'</td><td>'+stat.timePerDay+'</td>');
+    table.append("<tr><td>"+formatTimeStamp(stat.time)+'</td><td>'+stat.timePerDay+'</td></tr>');
   });
+  $('#statistics').slideDown();
+}
+
+function formatTimeStamp(timeStamp) {
+  var date = new Date(timeStamp);
+  return (date.getDate()+1)+'.'+(date.getMonth()+1)+'.'+date.getFullYear();
 }
 
 function quit(){
@@ -154,6 +160,7 @@ function clickedOnWeekDayButton(weekDayNumber){
 
 }
 
+
 function addAnswerButtons(){
     var panel = $("#answerButtons");
     for (var i = 1; i < 8; i++){
@@ -172,12 +179,19 @@ function addAnswerButtons(){
 }
 
 $(document).ready(function(){
-    $('#startButton ').click(function(){
+    $('#startButton').click(function(){
         start();
     });
-    $('#quitButton ').click(function(){
+    $('#quitButton').click(function(){
         quit();
     });
+    $('#statisticsLink').click(function(){
+        if ($('#statistics').is(':visible')) {
+          $('#statistics').slideUp();
+        } else {
+          showStatistics();        
+        }
+    });    
     addAnswerButtons();
     // start();
 });
