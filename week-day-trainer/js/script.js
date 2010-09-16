@@ -77,11 +77,11 @@ function showNextQuestion(){
     //$('#question ').text(dateToString(date) + " = " + weekDayName(date));
     $('#question').text(dateToString(currentDate) + " = ?");
     currentWeekDay = weekDayIndex(currentDate)
-    $('#currentRoundLabel').text((currentRound+1)+' / ' + rounds)
+    $('#currentRoundLabel').text((currentRound + 1) + ' / ' + rounds)
 }
 
 function getTime(){
-  return (new Date()).getTime();
+    return (new Date()).getTime();
 }
 
 function start(){
@@ -99,24 +99,50 @@ function quit(){
 }
 
 function gameFinished(){
-  var timePerDay = Math.round((getTime()-startTime)/rounds)/1000;
-  alert("You needed "+timePerDay+" seconds per day.");
-  $('#gameSettings').slideToggle()
-  $('#game').slideToggle()
+    var timePerDay = Math.round((getTime() - startTime) / rounds) / 1000;
+    alert("You needed " + timePerDay + " seconds per day.");
+    saveStatistics(timePerDay);
+    $('#gameSettings').slideToggle()
+    $('#game').slideToggle()
 }
 
-function clickedOnWeekDayButton(weekDayNumber){
-    if (weekDayNumber==currentWeekDay) {
-      currentRound++;
-      if (currentRound<rounds) {
-        showNextQuestion();        
-      } else {
-        gameFinished();
-      }
-    } else {
-      alert("No!");
+function saveStatistics(timePerDay){
+    var statistics = loadStatisticsForRange();
+    statistics.push({time:getTime(),timePerDay:timePerDay});
+    saveStatisticsForRange(statistics);
+}
+
+function loadStatisticsForRange(){
+    var serData = localStorage.getItem(rangeKey())
+    if (serData != null) {
+        return JSON.parse(serData);
+    } else{
+        return [];
     }
-    
+}
+
+function rangeKey(){
+    var range = getRange();
+    return range[0] + "-" + range[1];
+}
+
+function saveStatisticsForRange(statistics){
+  localStorage.setItem(rangeKey(),JSON.stringify(statistics));
+}
+
+
+function clickedOnWeekDayButton(weekDayNumber){
+    if (weekDayNumber == currentWeekDay){
+        currentRound++;
+        if (currentRound < rounds){
+            showNextQuestion();
+        } else{
+            gameFinished();
+        }
+    } else{
+        alert("No!");
+    }
+
 }
 
 function addAnswerButtons(){
@@ -129,7 +155,8 @@ function addAnswerButtons(){
         };
         var answerRow = $.nano('<div class="answerRow"><button id="dayButton{dayNumber}">{dayName}</button><span id="result{dayNumber}" class="result"></span></div>', rowData);
         panel.append(answerRow);
-        $('#dayButton' + dayNumber).bind('click',rowData,function(event){
+        $('#dayButton' + dayNumber).bind('click', rowData,
+        function(event){
             clickedOnWeekDayButton(event.data.dayNumber);
         });
     }
