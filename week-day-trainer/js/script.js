@@ -87,6 +87,7 @@ function getTime(){
 function start(){
     $('#gameSettings').slideToggle();
     $('#game').slideToggle();
+    $('#statistics').slideUp();
     currentRound = 0;
     startTime = getTime();
     rounds = $('#rounds').val();
@@ -95,12 +96,31 @@ function start(){
 
 function showStatistics(){
   var stats = loadStatisticsForRange();
+  if (stats.length == 0) {
+    window.alert("No Stats!");
+    return;
+  }
   var table = $('#statisticsTable');
   $('td',table).remove();
   jQuery.each(stats,function (i,stat){
     table.append("<tr><td>"+formatTimeStamp(stat.time)+'</td><td>'+stat.timePerDay+'</td></tr>');
-  });
+  });  
+  
   $('#statistics').slideDown();
+  
+  var chartData = generateChartData(stats);
+  $.plot($('#chart'), [{data:chartData}]);
+}
+
+function generateChartData(stats){
+  var result = [];
+  var msInOneDay = 24*60*60*1000;
+  var firstDayTimeStamp = stats[0].time;
+  jQuery.each(stats,function (i,stat){
+    var timeInDays = Math.round((stat.time-firstDayTimeStamp)/msInOneDay*100)/100;
+    result.push([timeInDays,stat.timePerDay]);
+  });
+  return result;
 }
 
 function formatTimeStamp(timeStamp) {
