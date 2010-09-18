@@ -3,6 +3,7 @@
 */
 
 var currentRound;
+var errors;
 var rounds;
 var currentWeekDay;
 var startTime;
@@ -89,6 +90,7 @@ function start(){
     $('#game').slideToggle();
     $('#statistics').slideUp();
     currentRound = 0;
+    errors = 0;
     startTime = getTime();
     rounds = $('#rounds').val();
     showNextQuestion();
@@ -112,14 +114,14 @@ function paintTable(stats){
     $('td', table).remove();
     jQuery.each(stats,
     function(i, stat){
-        table.append("<tr><td>" + formatTimeStamp(stat.time) + '</td><td>' + stat.timePerDay + '</td></tr>');
+        table.append("<tr><td>" + formatTimeStamp(stat.time) + '</td><td>' + stat.timePerDay + '</td><td>' + stat.errors + '</td></tr>');
     });
 }
 
 function paintChart(stats){
-    var chartData = generateChartData(stats);
+    var series = generateChartDataSeries(stats);
     $.plot($('#chart'), [{
-        data: chartData,
+        data: series.timeSeries,
         lines: {
             show: true
         },
@@ -127,6 +129,18 @@ function paintChart(stats){
             show: true
         },
         label: 'Time needed to calculate 1 day'
+    },
+    {
+        data: series.errorsSeries,
+        points: {
+            show: true
+        },
+        bars: {
+            show: true
+        },
+        color: 'rgb(255, 0, 0)',
+        yaxis: 2,
+        label: 'Mean errors per day calculation'
     }],
     {
         xaxis: {
@@ -135,17 +149,24 @@ function paintChart(stats){
     });
 }
 
-function generateChartData(stats){
-    var result = [];
+function generateChartDataSeries(stats){
+    var timeSeries = [];
+    var errorsSeries = [];
     var msInOneDay = 24 * 60 * 60 * 1000;
     var firstDayTimeStamp = stats[0].time;
     var resolution = 24 * 60 * 60;
     jQuery.each(stats,
     function(i, stat){
         var timeInDays = Math.round((stat.time - firstDayTimeStamp) / msInOneDay * resolution) / resolution;
-        result.push([stat.time, stat.timePerDay]);
+        timeSeries.push([stat.time, stat.timePerDay]);
+        if (stat.errors > 0){
+            errorsSeries.push([stat.time, stat.errors]);
+        }
     });
-    return result;
+    return{
+        timeSeries: timeSeries,
+        errorsSeries: errorsSeries
+    };
 }
 
 function clearStats(){
@@ -175,7 +196,8 @@ function saveStatistics(timePerDay){
     var statistics = loadStatisticsForRange();
     statistics.push({
         time: getTime(),
-        timePerDay: timePerDay
+        timePerDay: timePerDay,
+        errors: errors / rounds
     });
     saveStatisticsForRange(statistics);
 }
@@ -208,6 +230,7 @@ function clickedOnWeekDayButton(weekDayNumber){
             gameFinished();
         }
     } else{
+        errors++;
         alert("No!");
     }
 
