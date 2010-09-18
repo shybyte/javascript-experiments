@@ -95,37 +95,62 @@ function start(){
 }
 
 function showStatistics(){
-  var stats = loadStatisticsForRange();
-  if (stats.length == 0) {
-    window.alert("No Stats!");
-    return;
-  }
-  var table = $('#statisticsTable');
-  $('td',table).remove();
-  jQuery.each(stats,function (i,stat){
-    table.append("<tr><td>"+formatTimeStamp(stat.time)+'</td><td>'+stat.timePerDay+'</td></tr>');
-  });  
-  
-  $('#statistics').slideDown();
-  
-  var chartData = generateChartData(stats);
-  $.plot($('#chart'), [{data:chartData}]);
+    var stats = loadStatisticsForRange();
+
+    if (stats.length == 0){
+        window.alert("No Stats!");
+        return;
+    }
+    $('#statistics').slideDown();
+
+    paintTable(stats)
+    paintChart(stats);
+}
+
+function paintTable(stats){
+    var table = $('#statisticsTable');
+    $('td', table).remove();
+    jQuery.each(stats,
+    function(i, stat){
+        table.append("<tr><td>" + formatTimeStamp(stat.time) + '</td><td>' + stat.timePerDay + '</td></tr>');
+    });
+}
+
+function paintChart(stats){
+    var chartData = generateChartData(stats);
+    $.plot($('#chart'), [{
+        data: chartData,
+        lines: {
+            show: true
+        },
+        points: {
+            show: true
+        },
+        label: 'Time needed to calculate 1 day'
+    }],
+    {
+        xaxis: {
+            mode: "time"
+        }
+    });
 }
 
 function generateChartData(stats){
-  var result = [];
-  var msInOneDay = 24*60*60*1000;
-  var firstDayTimeStamp = stats[0].time;
-  jQuery.each(stats,function (i,stat){
-    var timeInDays = Math.round((stat.time-firstDayTimeStamp)/msInOneDay*100)/100;
-    result.push([timeInDays,stat.timePerDay]);
-  });
-  return result;
+    var result = [];
+    var msInOneDay = 24 * 60 * 60 * 1000;
+    var firstDayTimeStamp = stats[0].time;
+    var resolution = 24 * 60 * 60;
+    jQuery.each(stats,
+    function(i, stat){
+        var timeInDays = Math.round((stat.time - firstDayTimeStamp) / msInOneDay * resolution) / resolution;
+        result.push([stat.time, stat.timePerDay]);
+    });
+    return result;
 }
 
-function formatTimeStamp(timeStamp) {
-  var date = new Date(timeStamp);
-  return (date.getDate()+1)+'.'+(date.getMonth()+1)+'.'+date.getFullYear();
+function formatTimeStamp(timeStamp){
+    var date = new Date(timeStamp);
+    return (date.getDate() + 1) + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
 }
 
 function quit(){
@@ -143,13 +168,16 @@ function gameFinished(){
 
 function saveStatistics(timePerDay){
     var statistics = loadStatisticsForRange();
-    statistics.push({time:getTime(),timePerDay:timePerDay});
+    statistics.push({
+        time: getTime(),
+        timePerDay: timePerDay
+    });
     saveStatisticsForRange(statistics);
 }
 
 function loadStatisticsForRange(){
     var serData = localStorage.getItem(rangeKey())
-    if (serData != null) {
+    if (serData != null){
         return JSON.parse(serData);
     } else{
         return [];
@@ -162,7 +190,7 @@ function rangeKey(){
 }
 
 function saveStatisticsForRange(statistics){
-  localStorage.setItem(rangeKey(),JSON.stringify(statistics));
+    localStorage.setItem(rangeKey(), JSON.stringify(statistics));
 }
 
 
@@ -206,12 +234,12 @@ $(document).ready(function(){
         quit();
     });
     $('#statisticsLink').click(function(){
-        if ($('#statistics').is(':visible')) {
-          $('#statistics').slideUp();
-        } else {
-          showStatistics();        
+        if ($('#statistics').is(':visible')){
+            $('#statistics').slideUp();
+        } else{
+            showStatistics();
         }
-    });    
+    });
     addAnswerButtons();
     // start();
 });
