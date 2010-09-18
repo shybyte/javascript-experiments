@@ -148,6 +148,11 @@ function generateChartData(stats){
     return result;
 }
 
+function clearStats(){
+    saveStatisticsForRange([]);
+    $('#statistics').slideUp();
+}
+
 function formatTimeStamp(timeStamp){
     var date = new Date(timeStamp);
     return (date.getDate() + 1) + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
@@ -239,6 +244,9 @@ $(document).ready(function(){
         } else{
             showStatistics();
         }
+    });
+    $('#clearStatsButton').click(function(){
+        clearStats();
     });
     addAnswerButtons();
     // start();
