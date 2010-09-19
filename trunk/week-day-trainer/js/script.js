@@ -97,17 +97,22 @@ function start(){
 }
 
 function showStatistics(){
-    var stats = loadStatisticsForRange();
-
-    if (stats.length == 0){
-        window.alert("No Stats!");
-        return;
-    }
     $('#statistics').slideDown();
-
-    paintTable(stats)
-    paintChart(stats);
+    refreshStatistics()
 }
+
+function refreshStatistics(){
+    var stats = loadStatisticsForRange();
+    if (stats.length == 0){
+        $('#noStatsAvailable').show();
+        $('#statsAvailable').hide();
+    } else {
+        $('#noStatsAvailable').hide();
+        $('#statsAvailable').show();
+        paintChart(stats);
+    }
+}
+
 
 function paintTable(stats){
     var table = $('#statisticsTable');
@@ -118,9 +123,12 @@ function paintTable(stats){
     });
 }
 
+var chartStats;
 function paintChart(stats){
+    chartStats = stats;
     var series = generateChartDataSeries(stats);
-    $.plot($('#chart'), [{
+    var chart = $('#chart');
+    $.plot(chart, [{
         data: series.timeSeries,
         lines: {
             show: true
@@ -128,15 +136,20 @@ function paintChart(stats){
         points: {
             show: true
         },
-        label: 'Time needed to calculate 1 day'
+        color: 'rgb(0,255,0)',
+        label: 'Time per day calculation (in seconds)'
     },
     {
         data: series.errorsSeries,
-        points: {
+        points2: {
             show: true
         },
         bars: {
-            show: true
+            show: true,
+            align: 'center',
+            barWidth: 0.5,
+            lineWidth: 0,
+            fill: true
         },
         color: 'rgb(255, 0, 0)',
         yaxis: 2,
@@ -144,10 +157,64 @@ function paintChart(stats){
     }],
     {
         xaxis: {
-            mode: "time"
+            ticks: 0
+        },
+        yaxis: {
+            min: 0,
+            tickFormatter: function formatter(val, axis){
+                return val + " s";
+            }
+        },
+        y2axis: {
+            min: 0
+        },
+        legend: {
+            position: 'se'
+        },
+        grid: {
+            hoverable: true,
+            backgroundColor: {
+                colors: ["#fff", "#aaa"]
+            }
         }
     });
+    chart.bind("plothover", onPlotHover);
 }
+
+function showTooltip(x, y, contents){
+    $('<div id="tooltip">' + contents + '</div>').css({
+        border: '1px solid #fdd',
+        padding: '2px',
+        position: 'absolute',
+        top: y + 5,
+        left: x + 5,
+        'background-color': '#fee',
+        opacity: 0.70
+    }).appendTo("body");
+}
+
+var previousPoint = null;
+function onPlotHover(event, pos, item){
+    if (item){
+        if (previousPoint != item.datapoint){
+            previousPoint = item.datapoint;
+
+            $("#tooltip").remove();
+            var x = item.datapoint[0].toFixed(2),
+            y = item.datapoint[1].toFixed(2);
+            var date = new Date(chartStats[item.dataIndex].time)
+            var unitName = item.seriesIndex == 0 ? "Seconds" : "Errors";
+            var timeString = y+' '+unitName+' ('+(date.toLocaleString())+')';
+            showTooltip(item.pageX, item.pageY,timeString);
+        }
+    }
+    else{
+        $("#tooltip").remove();
+        previousPoint = null;
+    }
+}
+
+
 
 function generateChartDataSeries(stats){
     var timeSeries = [];
@@ -158,9 +225,9 @@ function generateChartDataSeries(stats){
     jQuery.each(stats,
     function(i, stat){
         var timeInDays = Math.round((stat.time - firstDayTimeStamp) / msInOneDay * resolution) / resolution;
-        timeSeries.push([stat.time, stat.timePerDay]);
+        timeSeries.push([i, stat.timePerDay]);
         if (stat.errors > 0){
-            errorsSeries.push([stat.time, stat.errors]);
+            errorsSeries.push([i, stat.errors]);
         }
     });
     return{
@@ -233,7 +300,16 @@ function clickedOnWeekDayButton(weekDayNumber){
         errors++;
         alert("No!");
     }
+}
 
+function isStatisticsVisible(){
+  return $('#statistics').is(':visible');
+}
+
+function onClickRangeButton (id){
+  if (isStatisticsVisible()){
+    refreshStatistics();
+  }
 }
 
 
@@ -255,6 +331,9 @@ function addAnswerButtons(){
 }
 
 $(document).ready(function(){
+    $("input[name='range']").click(function(){
+        onClickRangeButton(this.id);
+    });
     $('#startButton').click(function(){
         start();
     });
@@ -262,7 +341,7 @@ $(document).ready(function(){
         quit();
     });
     $('#statisticsLink').click(function(){
-        if ($('#statistics').is(':visible')){
+        if (isStatisticsVisible()){
             $('#statistics').slideUp();
         } else{
             showStatistics();
@@ -270,7 +349,7 @@ $(document).ready(function(){
     });
     $('#clearStatsButton').click(function(){
         clearStats();
-    });
+    });    
     addAnswerButtons();
     // start();
 });
