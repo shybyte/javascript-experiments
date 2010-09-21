@@ -77,8 +77,13 @@ function showNextQuestion(){
     var currentDate = randomDateFromRange();
     //$('#question ').text(dateToString(date) + " = " + weekDayName(date));
     $('#question').text(dateToString(currentDate) + " = ?");
-    currentWeekDay = weekDayIndex(currentDate)
-    $('#currentRoundLabel').text((currentRound + 1) + ' / ' + rounds)
+    currentWeekDay = weekDayIndex(currentDate);
+    $('#currentRoundLabel').text((currentRound + 1) + ' / ' + rounds);
+    if (currentRound>0) {
+      $('#currentRoundLabel').effect('shake',100);
+      //$('#question').animate({backgroundColor:'#b0ff80'}, 300).animate({backgroundColor:'#ffffff'}, 300);
+      $('#question').effect('bounce', 300);
+    }
 }
 
 function getTime(){
@@ -269,14 +274,25 @@ function saveStatistics(timePerDay){
     saveStatisticsForRange(statistics);
 }
 
+var fakedLocalStorage = {};
 function loadStatisticsForRange(){
-    var serData = localStorage.getItem(rangeKey())
-    if (serData != null){
-        return JSON.parse(serData);
-    } else{
-        return [];
-    }
+    if (isLocalStorageAvailable()) {
+      var serData = localStorage.getItem(rangeKey())
+      if (serData != null){
+          return JSON.parse(serData);
+      } else{
+          return [];
+      }
+    } else {
+      var fakedResult = fakedLocalStorage[rangeKey()];
+      return fakedResult==null ? [] :fakedResult;
+    }  
 }
+
+function isLocalStorageAvailable(){
+  return typeof(localStorage) != 'undefined'; 
+}
+
 
 function rangeKey(){
     var range = getRange();
@@ -284,13 +300,19 @@ function rangeKey(){
 }
 
 function saveStatisticsForRange(statistics){
-    localStorage.setItem(rangeKey(), JSON.stringify(statistics));
+    if (isLocalStorageAvailable()){
+      localStorage.setItem(rangeKey(), JSON.stringify(statistics));
+    } else {
+      fakedLocalStorage[rangeKey()] = statistics;
+    }
 }
 
 
 function clickedOnWeekDayButton(weekDayNumber){
+    var button = $('#dayButton' + weekDayNumber);
     if (weekDayNumber == currentWeekDay){
         currentRound++;
+        button.animate({color:'#00ff00'}, 300).animate({color:'#000000'}, 1000);
         if (currentRound < rounds){
             showNextQuestion();
         } else{
@@ -298,7 +320,10 @@ function clickedOnWeekDayButton(weekDayNumber){
         }
     } else{
         errors++;
-        alert("No!");
+        button.animate({color:'#ff0000'}, 100);
+        button.effect( "shake",{}, 100,function (){
+          button.animate({color:'#000000'}, 1000);
+        });
     }
 }
 

@@ -11,7 +11,7 @@ class MyHandler(BaseHTTPRequestHandler):
         try:
             print ">>>>>>>>>>>>>>>>"+self.path;
             if not ".." in self.path:
-                filename = self.path.split("?")[0][1:]
+                filename = "./"+self.path.split("?")[0][1:]
                 f = open(filename);
                 print "--------------->"+filename;
                 self.send_response(200)
