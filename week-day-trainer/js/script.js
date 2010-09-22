@@ -276,19 +276,8 @@ function saveStatistics(timePerDay){
     saveStatisticsForRange(statistics);
 }
 
-var fakedLocalStorage = {};
 function loadStatisticsForRange(){
-    if (isLocalStorageAvailable()) {
-      var serData = localStorage.getItem(rangeKey())
-      if (serData != null){
-          return JSON.parse(serData);
-      } else{
-          return [];
-      }
-    } else {
-      var fakedResult = fakedLocalStorage[rangeKey()];
-      return fakedResult==null ? [] :fakedResult;
-    }  
+    return $.jStorage.get(rangeKey(), []);
 }
 
 function isLocalStorageAvailable(){
@@ -302,11 +291,7 @@ function rangeKey(){
 }
 
 function saveStatisticsForRange(statistics){
-    if (isLocalStorageAvailable()){
-      localStorage.setItem(rangeKey(), JSON.stringify(statistics));
-    } else {
-      fakedLocalStorage[rangeKey()] = statistics;
-    }
+    $.jStorage.set(rangeKey(), statistics);
 }
 
 
