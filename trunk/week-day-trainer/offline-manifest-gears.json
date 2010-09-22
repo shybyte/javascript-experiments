@@ -1,6 +1,6 @@
 {
   "betaManifestVersion": 1,
-  "version": "version 1.01",
+  "version": "version 1.0.3",
   "entries": [
       { "url": "js/jquery-1.4.2.min.js"},
       { "url": "index.html"},
@@ -10,6 +10,8 @@
       { "url": "js/script.js"},
       { "url": "css/style.css"},
       { "url": "js/modernizr-1.5.min.js"},
-      { "url": "js/gears_init.js"}
+      { "url": "js/gears_init.js"},
+      { "url": "js/jquery.json-2.2.min.js"},
+      { "url": "js/jstorage.js"}
     ]
 }
