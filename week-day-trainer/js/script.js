@@ -84,6 +84,7 @@ function showNextQuestion(){
       //$('#question').animate({backgroundColor:'#b0ff80'}, 300).animate({backgroundColor:'#ffffff'}, 300);
       $('#question').effect('bounce', 300);
     }
+    $('#dayButton4').focus();
 }
 
 function getTime(){
@@ -262,6 +263,7 @@ function gameFinished(){
     saveStatistics(timePerDay);
     $('#gameSettings').slideToggle()
     $('#game').slideToggle()
+    $('#startButton').focus();
 }
 
 function saveStatistics(timePerDay){
@@ -356,6 +358,15 @@ function addAnswerButtons(){
 }
 
 $(document).ready(function(){
+    bindStaticButtons();
+    addAnswerButtons();
+    
+    if (!Modernizr.applicationcache){
+      makeOfflineByGears();
+    }  
+});
+
+function bindStaticButtons(){
     $("input[name='range']").click(function(){
         onClickRangeButton(this.id);
     });
@@ -374,7 +385,5 @@ $(document).ready(function(){
     });
     $('#clearStatsButton').click(function(){
         clearStats();
-    });    
-    addAnswerButtons();
-    // start();
-});
+    });
+}
