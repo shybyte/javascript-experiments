@@ -12,7 +12,7 @@
        Remove this if you use the .htaccess -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Week Day Trainer 1.1</title>
+  <title>Week Day Trainer</title>
   <meta name="description" content="Trainer for calculation of the day of the week.">
   <meta name="author" content="Marco Stahl">
 
@@ -20,19 +20,14 @@
   <meta name="viewport" content="width=device-width; initial-scale=1.0">
 
   <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
   <!-- CSS : implied media="all" -->
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Uncomment if you are specifically targeting less enabled mobile browsers
-  <link rel="stylesheet" media="handheld" href="css/handheld.css?v=1">  -->
-
- 
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
-  <script src="js/modernizr-1.5.min.js"></script>
+  <script src="js/modernizr.min.js"></script>
 
 </head>
 
@@ -40,7 +35,7 @@
 
   <div id="container">
     <header>
-      <h1>Week Day Trainer 1.1</h1>
+      <h1>Week Day Trainer</h1>
     </header>
     
     <div id="main">      
@@ -95,31 +90,20 @@
     </footer>
   </div> <!--! end of #container -->
 
-
-  <!-- Javascript at the bottom for fast page loading -->
-
-  <!-- Grab Google CDN's jQuery. fall back to local if necessary 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-  <script>!window.jQuery && document.write('<script src="js/jquery-1.4.2.min.js"><\/script>')</script>
-  -->
-
-  <script src="js/jquery-1.4.2.min.js"></script>  
-  <script src="js/jquery-ui-1.8.5.custom.min.js"></script>
-  <script src="js/flot/jquery.flot.min.js"></script>
-  
-  <script src="js/jquery.json-2.2.min.js"></script>
-  <script src="js/jstorage.js"></script>
-  
-  <script src="js/nano.js"></script>
-  <script src="js/gears_init.js"></script>
-  <script src="js/script.js"></script>
-
-  <!--[if lt IE 7 ]>
-    <script src="js/dd_belatedpng.js?"></script>
-    <script>
-      DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images
-    </script>
+  <script>
+    if (Modernizr.applicationcache) {
+      document.write('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"><\/script>');
+    } else {
+      document.write('<script src="js/gears_init.min.js"><\/script>');
+    }
+  </script>
+  <script>!window.jQuery && document.write('<script src="js/jquery.min.js"><\/script>')</script>
+ 
+   <!--[if lt IE 9 ]>
+    <script src="js/flot/excanvas.min.js"></script>
   <![endif]-->
-  
+ 
+  <script src="js/script.min.js"></script>
+
 </body>
-</html></table></table>
+</html>

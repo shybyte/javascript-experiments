@@ -1,17 +1,12 @@
 {
   "betaManifestVersion": 1,
-  "version": "version 1.0.3",
+  "version": "version 1.0.5",
   "entries": [
-      { "url": "js/jquery-1.4.2.min.js"},
       { "url": "index.html"},
-      { "url": "js/nano.js"},
-      { "url": "js/flot/jquery.flot.min.js"},
-      { "url": "js/jquery-ui-1.8.5.custom.min.js"},
-      { "url": "js/script.js"},
       { "url": "css/style.css"},
-      { "url": "js/modernizr-1.5.min.js"},
-      { "url": "js/gears_init.js"},
-      { "url": "js/jquery.json-2.2.min.js"},
-      { "url": "js/jstorage.js"}
+      { "url": "js/modernizr.min.js"},
+      { "url": "js/jquery.min.js"},
+      { "url": "js/gears_init.min.js"},
+      { "url": "js/script.min.js"}
     ]
 }
