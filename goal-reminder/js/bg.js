@@ -24,6 +24,8 @@ function getState(){
 function showMessage(title,message){
     var iconUrl = '../images/icon.png';
     var notification = webkitNotifications.createNotification(iconUrl,title,message);
+    notification.onclose = scheduleNextNotification;
+    notification.onerror = scheduleNextNotification;
     notification.show();
 }
 
@@ -34,17 +36,20 @@ function showGoalMessage(goal){
 function showRandomGoal(){
   var state = getState();
   var goals = state.goals;
-  var randomGoalIndex = Math.floor(goals.length*Math.random()); 
-  showGoalMessage(goals[randomGoalIndex]);
-    
+  if (goals.length>0) {
+    var randomGoalIndex = Math.floor(goals.length*Math.random()); 
+    showGoalMessage(goals[randomGoalIndex]);
+  }
 }
 
-var timer;
+function scheduleNextNotification(){
+  setTimeout(showRandomGoal,25*60*1000);
+}
 
 function init(){
-  timer = setInterval(showGoalMessage,2000);
+  scheduleNextNotification();
 }
 
 $(document).ready(function(){
-    //init();
+    init();
 });

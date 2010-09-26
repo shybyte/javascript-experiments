@@ -1,4 +1,8 @@
 $(function(){
+    $(window).bind("unload", function(){
+      saveState();
+      return true; 
+    })
     $("#accordion").accordion({
         clearStyle: true,
         autoHeight: false
