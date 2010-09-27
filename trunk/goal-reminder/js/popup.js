@@ -8,6 +8,9 @@ $(function(){
         autoHeight: false
     });
     initDisplay();
+    $('#restartCountDown').click(function(){
+        restartCountDown();
+    });
     $('#save').click(function(){
         saveState();
         window.close()
@@ -15,15 +18,25 @@ $(function(){
     })
 });
 
+function restartCountDown(){
+  saveState();
+  chrome.extension.getBackgroundPage().restartCountDown();
+}
+
 function saveState(){
     var state = chrome.extension.getBackgroundPage().getState();
     state.goals = getGoalsFromUI();
+    state.countDownLengthInMinutes = parseInt($('#countDownLengthInMinutes').val());
+    state.active = $('#activeCheckbox').attr('checked');
     chrome.extension.getBackgroundPage().setState(state);
 }
 
 function initDisplay(){
     var state = chrome.extension.getBackgroundPage().getState();
     initGoalsGUI(state.goals);
+    $('#countDownLengthInMinutes').val(state.countDownLengthInMinutes);
+    $('#activeCheckbox').attr('checked', state.active);
+
 }
 
 function getGoalsFromUI(){
@@ -120,6 +133,8 @@ if (!chrome.extension){
     chrome.extension = {
         getBackgroundPage: function(){
             var state = {
+                active: true,
+                countDownLengthInMinutes: 25,
                 goals: [{
                     title: 'Become a super man!',
                     text: '20 PushUps'
@@ -137,6 +152,10 @@ if (!chrome.extension){
                 },
                 getState: function(){
                     return state;
+                },
+                restartCountDown: function(){
+                  console.log("restartCountDown");
+                  console.log(state);
                 }
 
             }
