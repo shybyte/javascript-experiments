@@ -26,6 +26,8 @@ function setState(state){
     }
 }
 
+
+
 function getState(){
     if (currentState == null){
         currentState = readState()

@@ -1,7 +1,12 @@
+var saveOnUnload=true;
+
 $(function(){
-    $(window).bind("unload", function(){
-      saveState();
-      return true; 
+    $(window).bind("unload",
+    function(){
+        if (saveOnUnload) {
+          saveState();
+        }
+        return true;
     })
     $("#accordion").accordion({
         clearStyle: true,
@@ -16,11 +21,42 @@ $(function(){
         window.close()
         return false;
     })
+
+    $('#exportButton').click(function(){
+        export();
+    })
+
+    $('#importButton').click(function(){
+        return importState();
+    })
+
 });
 
+function export(){
+    saveState();
+    var state = chrome.extension.getBackgroundPage().getState();
+    var dumbString = JSON.stringify(state);
+    $('#transferTextBox').val(dumbString);
+    $('#transferErrors').text("");
+}
+
+function importState(){
+    var dumbString = $('#transferTextBox').val();
+    try{
+        var state=JSON.parse(dumbString);
+        chrome.extension.getBackgroundPage().setState(state);
+        saveOnUnload=false;
+        window.close();
+        return false;
+    }
+    catch(error){
+        $('#transferErrors').text("Ups,Format Error.");
+    }
+}
+
 function restartCountDown(){
-  saveState();
-  chrome.extension.getBackgroundPage().restartCountDown();
+    saveState();
+    chrome.extension.getBackgroundPage().restartCountDown();
 }
 
 function saveState(){
@@ -51,7 +87,7 @@ function getGoalsFromUI(){
 }
 
 function trimmedVal(jqueryNode){
-  return $.trim(jqueryNode.val());
+    return $.trim(jqueryNode.val());
 }
 
 
@@ -154,8 +190,8 @@ if (!chrome.extension){
                     return state;
                 },
                 restartCountDown: function(){
-                  console.log("restartCountDown");
-                  console.log(state);
+                    console.log("restartCountDown");
+                    console.log(state);
                 }
 
             }
