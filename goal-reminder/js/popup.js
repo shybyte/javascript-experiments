@@ -37,22 +37,44 @@ function export(){
     var state = chrome.extension.getBackgroundPage().getState();
     var dumbString = JSON.stringify(state);
     $('#transferTextBox').val(dumbString);
+    $('#transferTextBox').select();
     $('#transferErrors').text("");
 }
 
 function importState(){
     var dumbString = $('#transferTextBox').val();
-    try{
+    try {
         var state=JSON.parse(dumbString);
+        checkState(state);
         chrome.extension.getBackgroundPage().setState(state);
         saveOnUnload=false;
         window.close();
         return false;
     }
     catch(error){
-        $('#transferErrors').text("Ups,Format Error.");
+        $('#transferErrors').text("Ups,Format Error. "+error);
     }
 }
+
+function checkState(s){
+  checkNotNull(s,"active","boolean");
+  checkNotNull(s,"countDownLengthInMinutes","number");
+  checkNotNull(s,"goals","object");
+  s.goals.forEach(function (goal){
+    checkNotNull(goal,"title","string");
+    checkNotNull(goal,"text","string");
+  });  
+}
+
+function checkNotNull(s,attName,type){
+  if (s[attName] == null) {
+    throw "I miss "+attName;
+  }
+  if (typeof(s[attName]) != type) {
+    throw attName+" should have type "+type;
+  }
+}
+
 
 function restartCountDown(){
     saveState();
@@ -198,3 +220,5 @@ if (!chrome.extension){
         }
     };
 }
+
+
