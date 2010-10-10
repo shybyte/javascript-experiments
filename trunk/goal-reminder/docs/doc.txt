@@ -1,0 +1,17 @@
+Do you want to prevent wasting the time of your life surfing the internet forgetting the time?
+Do you want to stick to regular breaks while working on the computer?
+Do you want to get in shape and stay fit by some sportive breaks while surfing?
+Do you need a timer for the Pomodoro Technique?
+Do you want to self improve yourself by creating an exoself? 
+Do you need an advanced MotivAider inside your browser?
+
+This extension reminds you regularly of your important goals in life or just to pause for some sport or do a short walk to refresh your mind.
+
+It displays a minute timer in the right top corner of your browser. When the count down is down it shows a random goal.
+You can configure length of countdown or disable it temporally.
+You can also import or export your goals.
+
+
+This extension is open source so you can make sure it's doing nothing evil. Please visit the development website for source code and an issue tracker. 
+I would love to hear your ideas how to make this extension better.
+
