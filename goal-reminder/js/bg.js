@@ -1,12 +1,12 @@
 const defaultState = {
     active: true,
-    countDownLengthInMinutes: 25,
+    countDownLengthInMinutes: 15,
     goals: [{
-        title: 'Become a super man!',
-        text: '20 PushUps'
+        title: 'Become a Superman!',
+        text: 'Do 20 Push-Ups.'
     },
     {
-        title: 'Become a RockStar!',
+        title: 'Become a Rock Star!',
         text: 'Play one Song.'
     }]
 }
