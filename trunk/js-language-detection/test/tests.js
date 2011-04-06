@@ -62,9 +62,6 @@ function assertLanguage(text,lang) {
 }
 
 test("detectLanguage", function() {
-	languageDetection.setFingerPrintData('en',en);
-	languageDetection.setFingerPrintData('de',de);
-	
 	assertLanguage("Das ist ein Test.","de");
 	assertLanguage("This is a test.","en");
 	
