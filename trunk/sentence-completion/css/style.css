@@ -5,6 +5,7 @@
 	height: 20em;
 	border: 1px solid silver;
 	overflow: auto;
+	white-space: pre-wrap;
 }
 
 .sentenceCompletionPopup {
