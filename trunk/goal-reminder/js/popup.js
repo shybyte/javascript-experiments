@@ -23,7 +23,7 @@ $(function(){
     })
 
     $('#exportButton').click(function(){
-        export();
+        exportState();
     })
 
     $('#importButton').click(function(){
@@ -32,7 +32,7 @@ $(function(){
 
 });
 
-function export(){
+function exportState(){
     saveState();
     var state = chrome.extension.getBackgroundPage().getState();
     var dumbString = JSON.stringify(state);
