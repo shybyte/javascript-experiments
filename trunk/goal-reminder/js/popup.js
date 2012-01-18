@@ -1,42 +1,48 @@
-var saveOnUnload=true;
+var saveOnUnload = true;
 
-$(function(){
+$(function () {
     $(window).bind("unload",
-    function(){
-        if (saveOnUnload) {
-          saveState();
-        }
-        return true;
-    })
+        function () {
+            if (saveOnUnload) {
+                saveState();
+            }
+            return true;
+        })
     $("#accordion").accordion({
-        clearStyle: true,
-        autoHeight: false
+        clearStyle:true,
+        autoHeight:false
     });
     initDisplay();
-    $('#restartCountDown').click(function(){
+    $('#restartCountDown').click(function () {
         restartCountDown();
     });
-    $('#save').click(function(){
+    $('#save').click(function () {
         saveState();
         window.close()
         return false;
     })
 
-    $('#exportButton').click(function(){
+    $('#exportButton').click(function () {
         exportState();
     })
 
-    $('#importButton').click(function(){
+    $('#importButton').click(function () {
         return importState();
     })
 
-    $('#testSpeech').click(function(){
+    $('#testSpeech').click(function () {
         chrome.tts.speak("Can you here me?");
+        chrome.tts.getVoices(
+            function (voices) {
+                if (voices.length == 0) {
+                    alert("There are no installed tts voices. Please install a tts voice  from the chrome webstore in order to hear something.")
+                }
+            });
     })
 
 });
 
-function exportState(){
+function exportState() {
     saveState();
     var state = chrome.extension.getBackgroundPage().getState();
     var dumbString = JSON.stringify(state);
@@ -45,47 +51,47 @@ function exportState(){
     $('#transferErrors').text("");
 }
 
-function importState(){
+function importState() {
     var dumbString = $('#transferTextBox').val();
     try {
-        var state=JSON.parse(dumbString);
+        var state = JSON.parse(dumbString);
         checkState(state);
         chrome.extension.getBackgroundPage().setState(state);
-        saveOnUnload=false;
+        saveOnUnload = false;
         window.close();
         return false;
     }
-    catch(error){
-        $('#transferErrors').text("Ups,Format Error. "+error);
+    catch (error) {
+        $('#transferErrors').text("Ups,Format Error. " + error);
     }
 }
 
-function checkState(s){
-  checkNotNull(s,"active","boolean");
-  checkNotNull(s,"countDownLengthInMinutes","number");
-  checkNotNull(s,"goals","object");
-  s.goals.forEach(function (goal){
-    checkNotNull(goal,"title","string");
-    checkNotNull(goal,"text","string");
-  });  
+function checkState(s) {
+    checkNotNull(s, "active", "boolean");
+    checkNotNull(s, "countDownLengthInMinutes", "number");
+    checkNotNull(s, "goals", "object");
+    s.goals.forEach(function (goal) {
+        checkNotNull(goal, "title", "string");
+        checkNotNull(goal, "text", "string");
+    });
 }
 
-function checkNotNull(s,attName,type){
-  if (s[attName] == null) {
-    throw "I miss "+attName;
-  }
-  if (typeof(s[attName]) != type) {
-    throw attName+" should have type "+type;
-  }
+function checkNotNull(s, attName, type) {
+    if (s[attName] == null) {
+        throw "I miss " + attName;
+    }
+    if (typeof(s[attName]) != type) {
+        throw attName + " should have type " + type;
+    }
 }
 
 
-function restartCountDown(){
+function restartCountDown() {
     saveState();
     chrome.extension.getBackgroundPage().restartCountDown();
 }
 
-function saveState(){
+function saveState() {
     var state = chrome.extension.getBackgroundPage().getState();
     state.goals = getGoalsFromUI();
     state.countDownLengthInMinutes = parseInt($('#countDownLengthInMinutes').val());
@@ -94,7 +100,7 @@ function saveState(){
     chrome.extension.getBackgroundPage().setState(state);
 }
 
-function initDisplay(){
+function initDisplay() {
     var state = chrome.extension.getBackgroundPage().getState();
     initGoalsGUI(state.goals);
     $('#countDownLengthInMinutes').val(state.countDownLengthInMinutes);
@@ -103,121 +109,120 @@ function initDisplay(){
 
 }
 
-function getGoalsFromUI(){
+function getGoalsFromUI() {
     var goals = [];
-    $('tr', getGoalsTableBody()).each(function(){
+    $('tr', getGoalsTableBody()).each(function () {
         goals.push({
-            title: trimmedVal($('.title', this)),
-            text: trimmedVal($('.text', this))
+            title:trimmedVal($('.title', this)),
+            text:trimmedVal($('.text', this))
         });
     });
     return goals;
 }
 
-function trimmedVal(jqueryNode){
+function trimmedVal(jqueryNode) {
     return $.trim(jqueryNode.val());
 }
 
 
-function initGoalsGUI(goals){
+function initGoalsGUI(goals) {
     displayGoals(goals);
-    $('#addGoalButton').click(function(){
+    $('#addGoalButton').click(function () {
         addGoalRow(getGoalsTableBody(), ({
-            title: '',
-            text: ''
+            title:'',
+            text:''
         }), true);
     });
 }
 
-function getGoalsTableBody(){
+function getGoalsTableBody() {
     return $('#goalsTable tbody');
 }
 
 
-function addGoalRow(tableBody, goal, anim){
+function addGoalRow(tableBody, goal, anim) {
     tableBody.append($.nano('<tr style="-webkit-transform:scale(0.1)"><td><input type="text" class="title" value="{title}"></td><td><input type="text" class="text" value="{text}"/></td><td><button class="removeButton">-</button></td></tr>', goal));
     initLastRow(tableBody, anim);
 }
 
 
-
-function isEmpty(s){
-    return ! s || s.match(/^\s*$/);
+function isEmpty(s) {
+    return !s || s.match(/^\s*$/);
 }
 
-function displayGoals(goals){
+function displayGoals(goals) {
     var tableBody = getGoalsTableBody();
-    if (goals){
+    if (goals) {
         $.each(goals,
-        function(i, goal){
-            if (!isEmpty(goal.title) || !isEmpty(goal.text)){
-                addGoalRow(tableBody, goal, false);
-            }
-        });
+            function (i, goal) {
+                if (!isEmpty(goal.title) || !isEmpty(goal.text)) {
+                    addGoalRow(tableBody, goal, false);
+                }
+            });
     }
 }
-
-
 
 
 /* table utils */
 
-function showRow(row, anim){
-    if (anim){
-        window.setTimeout(function(){
-            row.css('webkitTransform', 'scale(1)')
-        },
-        10);
+function showRow(row, anim) {
+    if (anim) {
+        window.setTimeout(function () {
+                row.css('webkitTransform', 'scale(1)')
+            },
+            10);
     }
-    else{
+    else {
         row.css('webkitTransform', 'scale(1)');
     }
 }
 
-function initLastRow(tableBody, anim){
+function initLastRow(tableBody, anim) {
     var row = $('tr:last-child', tableBody);
     showRow(row, anim);
-    $('.removeButton', row).click(function(){
+    $('.removeButton', row).click(function () {
         removeRow($(this.parentNode.parentNode));
     });
 }
 
-function removeRow(row){
+function removeRow(row) {
     row.css('webkitTransform', 'scale(0)');
-    window.setTimeout(function(){
-        row.remove()
-    },
-    500);
+    window.setTimeout(function () {
+            row.remove()
+        },
+        500);
 }
 
 
 /* mock background page */
 
-if (!chrome.extension){
+if (!chrome.extension) {
     chrome.extension = {
-        getBackgroundPage: function(){
+        getBackgroundPage:function () {
             var state = {
-                active: true,
-                countDownLengthInMinutes: 25,
-                goals: [{
-                    title: 'Become a super man!',
-                    text: '20 PushUps'
-                },
-                {
-                    title: 'Become a RockStar!',
-                    text: 'Play one Song.'
-                }]
+                active:true,
+                countDownLengthInMinutes:25,
+                goals:[
+                    {
+                        title:'Become a super man!',
+                        text:'20 PushUps'
+                    },
+                    {
+                        title:'Become a RockStar!',
+                        text:'Play one Song.'
+                    }
+                ]
             };
 
             return{
-                setState: function(newState){
+                setState:function (newState) {
                     state = newState;
                     console.log(state);
                 },
-                getState: function(){
+                getState:function () {
                     return state;
                 },
-                restartCountDown: function(){
+                restartCountDown:function () {
                     console.log("restartCountDown");
                     console.log(state);
                 }
