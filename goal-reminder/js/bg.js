@@ -1,6 +1,7 @@
 const defaultState = {
     active: true,
     countDownLengthInMinutes: 15,
+    enableTTS: true,
     goals: [{
         title: 'Become a Superman!',
         text: 'Do 20 Push-Ups.'
@@ -49,7 +50,16 @@ function showMessage(title, message){
     var notification = webkitNotifications.createNotification(iconUrl, title, message);
     notification.onclose = restartCountDown;
     notification.onerror = restartCountDown;
+    notification.ondisplay = function () {
+        onDisplayMessage(title,message);
+    };
     notification.show();
+}
+
+function onDisplayMessage(title,message) {
+    if (currentState.enableTTS) {
+        chrome.tts.speak(title+message);
+    }
 }
 
 function showGoalMessage(goal){

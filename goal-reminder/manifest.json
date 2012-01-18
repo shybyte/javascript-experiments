@@ -12,7 +12,7 @@
     "popup": "crx/popup.html"
   },
   "permissions": [
-    "notifications"
+    "notifications","tts"
   ]
   
 }
