@@ -2,6 +2,7 @@ const defaultState = {
     active: true,
     countDownLengthInMinutes: 15,
     enableTTS: true,
+    goalSelectionMode: "CYCLE_IN_RANDOM_ORDER",
     goals: [{
         title: 'Become a Superman!',
         text: 'Do 20 Push-Ups.'
@@ -13,9 +14,39 @@ const defaultState = {
 }
 
 var currentState;
-
 var countDown;
+var lastGoalIndex = 999;
 var showingNotification = false;
+
+function goals(){
+    return getState().goals;
+}
+
+const GoalSelectionMode = {
+    RANDOM:{
+        getNextGoalIndex:function () {
+            lastGoalIndex = Math.floor(goals().length * Math.random());
+            return lastGoalIndex;
+        }
+    },
+    CYCLE_IN_ORDER:{
+        getNextGoalIndex:function () {
+            lastGoalIndex = (lastGoalIndex + 1) % goals().length;
+            return lastGoalIndex;
+        }
+    },
+    CYCLE_IN_RANDOM_ORDER:{
+        randomOrder : [],
+        getNextGoalIndex:function () {
+            var goalsLength = goals().length;
+            if(this.randomOrder.length == 0) {
+                this.randomOrder = createRandomOrder(goalsLength,lastGoalIndex);
+            }
+            lastGoalIndex = this.randomOrder.splice(0,1)[0];
+            return lastGoalIndex<goalsLength ? lastGoalIndex : this.getNextGoalIndex();
+        }
+    }
+}
 
 function setState(state){
     currentState = state;
@@ -27,8 +58,6 @@ function setState(state){
     }
 }
 
-
-
 function getState(){
     if (currentState == null){
         currentState = readState()
@@ -38,7 +67,11 @@ function getState(){
 
 function readState(){
     try{
-        return JSON.parse(localStorage["state"]);
+        var loadedState = JSON.parse(localStorage["state"]);
+        if (!loadedState.goalSelectionMode) {
+            loadedState.goalSelectionMode = defaultState.goalSelectionMode;
+        }
+        return loadedState;
     }
     catch(error){
         return defaultState;
@@ -67,13 +100,16 @@ function showGoalMessage(goal){
     showingNotification = true;
 }
 
-function showRandomGoal(){
+function showNextGoal(){
     var state = getState();
     var goals = state.goals;
     if (goals.length > 0){
-        var randomGoalIndex = Math.floor(goals.length * Math.random());
-        showGoalMessage(goals[randomGoalIndex]);
+        showGoalMessage(goals[getCurrentGoalSelectionMode().getNextGoalIndex()]);
     }
+}
+
+function getCurrentGoalSelectionMode(){
+    return GoalSelectionMode[getState().goalSelectionMode || ""] || defaultState.goalSelectionMode;
 }
 
 function restartCountDown(){
@@ -86,7 +122,7 @@ function onEverySecond(){
       countDown--;
       var minutes = Math.floor(countDown / 60);
       if (minutes <= 0 && !showingNotification){
-          showRandomGoal();
+          showNextGoal();
       }
       chrome.browserAction.setBadgeText({
           text: "" + minutes
