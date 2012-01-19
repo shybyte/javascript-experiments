@@ -97,6 +97,7 @@ function saveState() {
     state.countDownLengthInMinutes = parseInt($('#countDownLengthInMinutes').val());
     state.active = $('#activeCheckbox').attr('checked');
     state.enableTTS = $('#enableTTSCheckbox').attr('checked');
+    state.goalSelectionMode = $('#goalSelectionMode').val();
     chrome.extension.getBackgroundPage().setState(state);
 }
 
@@ -106,6 +107,7 @@ function initDisplay() {
     $('#countDownLengthInMinutes').val(state.countDownLengthInMinutes);
     $('#activeCheckbox').attr('checked', state.active);
     $('#enableTTSCheckbox').attr('checked', state.enableTTS);
+    $('#goalSelectionMode').val(state.goalSelectionMode);
 
 }
 
