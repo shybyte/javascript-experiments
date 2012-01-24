@@ -14,11 +14,14 @@ $(function () {
     });
     initDisplay();
     $('#restartCountDown').click(function () {
+        saveState();
         restartCountDown();
+        window.close();
+        return false;
     });
     $('#save').click(function () {
         saveState();
-        window.close()
+        window.close();
         return false;
     })
 
@@ -87,7 +90,6 @@ function checkNotNull(s, attName, type) {
 
 
 function restartCountDown() {
-    saveState();
     chrome.extension.getBackgroundPage().restartCountDown();
 }
 
