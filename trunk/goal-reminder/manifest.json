@@ -1,18 +1,22 @@
 {
-  "name": "Goal Reminder",
-  "version": "1.4",
-  "description": "Reminds you of your goals in life while wasting your time in the internet.",
-  "icons": { "16": "crx/icons/icon-16.png",
-           "48": "crx/icons/icon-48.png",
-          "128": "crx/icons/icon-128.png" },
-  "background_page": "crx/bg.html",
-  "browser_action": {
-    "default_title": "Goal Reminder!",
-    "default_icon": "crx/icons/icon-19.png",
-    "popup": "crx/popup.html"
-  },
-  "permissions": [
-    "notifications","tts"
-  ]
-  
+    "name":"Goal Reminder",
+    "version":"1.4.1",
+    "description":"Reminds you of your goals in life while wasting your time in the internet. No registration. Full privacy. Speech (TTS)",
+    "icons":{
+        "16":"crx/icons/icon-16.png",
+        "48":"crx/icons/icon-48.png",
+        "128":"crx/icons/icon-128.png"
+    },
+    "background_page":"crx/bg.html",
+    "browser_action":{
+        "default_title":"Goal Reminder!",
+        "default_icon":"crx/icons/icon-19.png",
+        "popup":"crx/popup.html"
+    },
+    "offline_enabled": true,
+    "minimum_chrome_version": "14",
+    "permissions":[
+        "notifications", "tts"
+    ]
+
 }
