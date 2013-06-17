@@ -34,16 +34,42 @@ $(function () {
     })
 
     $('#testSpeech').click(function () {
-        chrome.tts.speak("Can you here me?");
-        chrome.tts.getVoices(
-            function (voices) {
+        if (isSpeechDisabled()) {
+          alert('Speech is disabled!');
+          return;
+        }
+        chrome.tts.getVoices( function (voices) {
                 if (voices.length == 0) {
-                    alert("There are no installed tts voices. Please install a tts voice  from the chrome webstore in order to hear something.")
+                    alert("There are no installed tts voices. Please install a tts voice from the chrome webstore in order to hear something.");
+                } else {
+                  chrome.tts.speak($('#speechTestText').val() || "Can you here me?",getVoiceOptions());
                 }
             });
     })
 
 });
+
+
+function mapSomeValues(value,mapping) {
+  return mapping[value] || value;
+}
+
+function isSpeechDisabled() {
+  return $('#voices').val() == 'disabled';
+}
+
+function getVoiceOptions() {
+  return {
+    voiceName:   mapSomeValues($('#voices').val(),{disabled:null,default: null}),
+    volume: rangeValue('volume'),
+    pitch: rangeValue('pitch'),
+    rate: rangeValue('rate')
+  }
+}
+
+function rangeValue(id) {
+  return parseFloat($('#'+id).val());
+}
 
 function exportState() {
     saveState();
@@ -97,9 +123,11 @@ function saveState() {
     var state = chrome.extension.getBackgroundPage().getState();
     state.goals = getGoalsFromUI();
     state.countDownLengthInMinutes = parseInt($('#countDownLengthInMinutes').val());
-    state.active = $('#activeCheckbox').attr('checked');
-    state.enableTTS = $('#enableTTSCheckbox').attr('checked');
+    state.active = $('#activeCheckbox').prop('checked');
     state.goalSelectionMode = $('#goalSelectionMode').val();
+    state.voiceOptions = getVoiceOptions();
+    state.speechTestText = $('#speechTestText').val();
+    state.enableTTS = !isSpeechDisabled();
     chrome.extension.getBackgroundPage().setState(state);
 }
 
@@ -107,10 +135,27 @@ function initDisplay() {
     var state = chrome.extension.getBackgroundPage().getState();
     initGoalsGUI(state.goals);
     $('#countDownLengthInMinutes').val(state.countDownLengthInMinutes);
-    $('#activeCheckbox').attr('checked', state.active);
-    $('#enableTTSCheckbox').attr('checked', state.enableTTS);
+    $('#activeCheckbox').prop('checked', state.active);
+    initVoiceSettings(state);
     $('#goalSelectionMode').val(state.goalSelectionMode);
 
+}
+
+function initVoiceSettings(state) {
+  chrome.tts.getVoices(function(voices) {
+    var $voices = $('#voices');
+    $voices.append(voices.map(function (voice) {
+      return $('<option/>').attr('value',voice.voiceName).text(voice.voiceName);
+    }));
+
+    var voiceOptions = state.voiceOptions || {};
+    $voices.val(voiceOptions.voiceName || (state.enableTTS ?  'default' : 'disabled'));
+    ['pitch', 'volume', 'rate'].forEach(function (voiceOptionName) {
+      $('#'+voiceOptionName).val(voiceOptions[voiceOptionName] || 1);
+    });
+
+    $('#speechTestText').val(state.speechTestText || "Can you hear me?");
+  });
 }
 
 function getGoalsFromUI() {

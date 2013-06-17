@@ -4,11 +4,11 @@ const defaultState = {
     enableTTS: true,
     goalSelectionMode: "CYCLE_IN_RANDOM_ORDER",
     goals: [{
-        title: 'Become a Superman!',
+        title: 'Become a Superman',
         text: 'Do 20 Push-Ups.'
     },
     {
-        title: 'Become a Rock Star!',
+        title: 'Become a Rock Star',
         text: 'Play one Song.'
     }]
 }
@@ -49,6 +49,7 @@ const GoalSelectionMode = {
 }
 
 function setState(state){
+    console.log(state);
     currentState = state;
     localStorage["state"] = JSON.stringify(state);
     if (!state.active) {
@@ -91,7 +92,7 @@ function showMessage(title, message){
 
 function onDisplayMessage(title,message) {
     if (currentState.enableTTS) {
-        chrome.tts.speak(title+message);
+        chrome.tts.speak(title+message,currentState.voiceOptions || {});
     }
 }
 

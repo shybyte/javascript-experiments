@@ -1,160 +1,203 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+<head>
     <title>
-      Goal Reminder Popup
+        Goal Reminder Popup
     </title>
-    <link type="text/css" href="../js/jquery/css/smoothness/jquery-ui.css" rel="stylesheet" />
+    <link type="text/css" href="../js/jquery/css/smoothness/jquery-ui.css" rel="stylesheet"/>
     <style type="text/css">
-/*<![CDATA[*/
-            .ui-tabs .ui-tabs-hide {
-                display: none;
-            }
-            
-            #page {
-                width: 40em;
-            }
-            
-      
-            #goalsTable {
-                width: 100%;        
-            }
-      
-      #goalsTable tr {
-        -webkit-transition: all 0.4s ease-in-out;
-      }     
-            
-            #goalsTable input[type = text] {
-                width: 14em;
-            }
-      
-            
-            body {
-                font-size: 12px;
-            }
-            
-            label {
-              font-size: 1.2em;
-            }
-            
-            #activeSection {
-              margin-top:1em;
-              margin-bottom:1em;
-            }
-            
-            #transferTextBox {
-              width:90%;
-              height:10em;
-            }
-            
-            #transferErrors {
-              color: red;
-            }
+            /*<![CDATA[*/
+        .ui-tabs .ui-tabs-hide {
+            display: none;
+        }
+
+        #page {
+            width: 40em;
+        }
+
+        #goalsTable {
+            width: 100%;
+        }
+
+        #goalsTable tr {
+            -webkit-transition: all 0.4s ease-in-out;
+        }
+
+        #goalsTable input[type = text] {
+            width: 14em;
+        }
+
+        body {
+            font-size: 12px;
+        }
+
+        label {
+            font-size: 1.2em;
+        }
+
+        .formTable label {
+            display: block;
+            margin-right: 2em;
+        }
+
+        .formTable input,
+        .formTable select {
+            width: 20em;
+        }
+
+        #activeSection {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        #transferTextBox {
+            width: 90%;
+            height: 10em;
+        }
+
+        #transferErrors {
+            color: red;
+        }
 
         #goalSelectionModeRow {
             margin-top: 0.5em;
         }
 
-    /*]]>*/
+            /*]]>*/
     </style>
     <script src="../js/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="../js/nano.js" type="text/javascript"></script>
     <script src="../js/jquery/jquery-ui.min.js" type="text/javascript"></script>
     <script src="../js/common.js" type="text/javascript"></script>
     <script src="../js/popup.js" type="text/javascript"></script>
-  </head>
-  <body>
-    <div id="page">
-      <div id="accordion">
+</head>
+<body>
+<div id="page">
+    <div id="accordion">
 
         <h3>
-          <a href="#">Your Goals</a>
+            <a href="#">Your Goals</a>
         </h3>
+
         <div id="goals">
-          <table id="goalsTable">
-            <thead>
-              <tr>
-                <th>
-                  Title
-                </th>
-                <th>
-                  Text
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-             <tbody></tbody>
-          </table><button id="addGoalButton">+</button>
-          <div id="goalSelectionModeRow">
-              <label for="goalSelectionMode">Mode:</label><select id="goalSelectionMode">
+            <table id="goalsTable">
+                <thead>
+                <tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Text
+                    </th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button id="addGoalButton">+</button>
+            <div id="goalSelectionModeRow">
+                <label for="goalSelectionMode">Mode:</label><select id="goalSelectionMode">
                 <option value="CYCLE_IN_RANDOM_ORDER">Cycle in Random Order</option>
                 <option value="RANDOM">Completely Random</option>
                 <option value="CYCLE_IN_ORDER">Cycle in Order</option>
-              </select>
-          </div>
-        </div>
-      
-                         
-
-        <h3>
-          <a href="#">Timer Settings</a>
-        </h3>
-        <div>
-              <table>
-                  <tr>
-                      <td>
-                          <label>
-                              Countdown Time in Minutes:
-                          </label>
-                      </td>
-                      <td>
-                          <input size="4" id="countDownLengthInMinutes"/>
-                      </td>
-                  </tr>
-              </table>
+            </select>
+            </div>
         </div>
 
-          <h3>
-              <a href="#">Speech Settings</a>
-          </h3>
-          <div>
-              <input type="checkbox" id="enableTTSCheckbox" checked="checked"/><label for="enableTTSCheckbox">Speech activated</label>
-              <button id="testSpeech">Test Speech</button>
-          </div>
-        
+
         <h3>
-          <a href="#">Import/Export</a>
+            <a href="#">Timer Settings</a>
         </h3>
+
         <div>
-              <textarea id="transferTextBox"></textarea><br/>
-              <div id="transferErrors"></div>
-              <button id="exportButton">Export</button><button id="importButton">Import</button>              
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            Countdown Time in Minutes:
+                        </label>
+                    </td>
+                    <td>
+                        <input size="4" id="countDownLengthInMinutes"/>
+                    </td>
+                </tr>
+            </table>
         </div>
-        
+
         <h3>
-          <a href="#">About Goal Reminder</a>
+            <a href="#">Speech Settings</a>
         </h3>
+
         <div>
-          <p>
-            &copy; 2010-2012 Marco Stahl
-          </p>
-          <p>
-            Its open sourced at <a target="_blank" href="http://code.google.com/p/javascript-experiments/">http://code.google.com/p/javascript-experiments</a>. Please use the issues tracker there for bug reports or feature requests.
-          </p>
+            <table class="formTable">
+                <tr>
+                    <td><label for="voices">Voice: </label></td>
+                    <td><select id="voices">
+                        <option value="disabled">Speech disabled</option>
+                        <option value="default" selected="selected">Default Voice</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><label for="volume">Volume</label></td>
+                    <td><input type="range" id="volume" min="0" max="1" step="0.05" value="0.5" title="Works only for some voices"/></td>
+                </tr>
+                <tr>
+                    <td><label for="pitch">Pitch</label></td>
+                    <td><input type="range" id="pitch" min="0" max="2" step="0.05"  value="1" title="Works only for some voices"/></td>
+                </tr>
+                <tr>
+                    <td><label for="rate">Speed</label></td>
+                    <td><input type="range" id="rate" min="0.1" max="2" step="0.05" value="1" title="Works only for some voices"/></td>
+                </tr>
+                <tr>
+                    <td><label for="speechTestText">Test Text:</label></td>
+                    <td><input type="text" id="speechTestText" value="Can you here me?"/></td>
+                </tr>
+            </table>
+
+            <button id="testSpeech">Test Speech</button>
         </div>
-      </div>
-      
-      
-      
-      <div id="activeSection">
-        <input type="checkbox" id="activeCheckbox" checked="checked"/><label for="activeCheckbox">Goal Reminder is active</label>
-      </div> 
-      
-      <form action="#">
-        <button id="save">Close</button> <button id="restartCountDown">Close &amp; Reset Timer</button>
-      </form>
-      
+
+        <h3>
+            <a href="#">Import/Export</a>
+        </h3>
+
+        <div>
+            <textarea id="transferTextBox"></textarea><br/>
+
+            <div id="transferErrors"></div>
+            <button id="exportButton">Export</button>
+            <button id="importButton">Import</button>
+        </div>
+
+        <h3>
+            <a href="#">About Goal Reminder</a>
+        </h3>
+
+        <div>
+            <p>
+                &copy; 2010-2013 Marco Stahl
+            </p>
+
+            <p>
+                Its open sourced at <a target="_blank" href="http://code.google.com/p/javascript-experiments/">http://code.google.com/p/javascript-experiments</a>.
+                Please use the issues tracker there for bug reports or feature requests.
+            </p>
+        </div>
     </div>
-  </body>
+
+
+    <div id="activeSection">
+        <input type="checkbox" id="activeCheckbox" checked="checked"/><label for="activeCheckbox">Goal Reminder is
+        active</label>
+    </div>
+
+    <form action="#">
+        <button id="save">Close</button>
+        <button id="restartCountDown">Close &amp; Reset Timer</button>
+    </form>
+
+</div>
+</body>
 </html>
