@@ -51,7 +51,7 @@ $(function () {
 
 
 function mapSomeValues(value,mapping) {
-  return mapping[value] || value;
+  return value in mapping ?  mapping[value] : value;
 }
 
 function isSpeechDisabled() {
@@ -60,7 +60,7 @@ function isSpeechDisabled() {
 
 function getVoiceOptions() {
   return {
-    voiceName:   mapSomeValues($('#voices').val(),{disabled:null,default: null}),
+    voiceName: mapSomeValues($('#voices').val(),{disabled:null,default: null}),
     volume: rangeValue('volume'),
     pitch: rangeValue('pitch'),
     rate: rangeValue('rate')
