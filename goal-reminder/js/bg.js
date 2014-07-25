@@ -81,13 +81,14 @@ function readState(){
 
 function showMessage(title, message){
     var iconUrl = '../images/icon.png';
-    var notification = webkitNotifications.createNotification(iconUrl, title, message);
-    notification.onclose = restartCountDown;
-    notification.onerror = restartCountDown;
-    notification.ondisplay = function () {
-        onDisplayMessage(title,message);
-    };
-    notification.show();
+    var notification = chrome.notifications.create('goal-reminder',{
+      type: 'basic',
+      title: title,
+      message: message,
+      iconUrl: iconUrl
+    },function () {
+      onDisplayMessage(title,message);
+    });
 }
 
 function onDisplayMessage(title,message) {
@@ -113,7 +114,8 @@ function getCurrentGoalSelectionMode(){
     return GoalSelectionMode[getState().goalSelectionMode || ""] || defaultState.goalSelectionMode;
 }
 
-function restartCountDown(){
+function restartCountDown(id,byUser){
+  console.log('Close',id,byUser);
     countDown = (getState().countDownLengthInMinutes + 1) * 60 - 1;
     showingNotification = false;
 }
@@ -134,6 +136,7 @@ function onEverySecond(){
 function init(){
     restartCountDown();
     setInterval(onEverySecond, 1000);
+    chrome.notifications.onClosed.addListener(restartCountDown);
 }
 
 $(document).ready(function(){
