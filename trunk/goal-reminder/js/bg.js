@@ -85,7 +85,8 @@ function showMessage(title, message){
       type: 'basic',
       title: title,
       message: message,
-      iconUrl: iconUrl
+      iconUrl: iconUrl,
+      priority: 2
     },function () {
       onDisplayMessage(title,message);
     });
@@ -115,7 +116,6 @@ function getCurrentGoalSelectionMode(){
 }
 
 function restartCountDown(id,byUser){
-  console.log('Close',id,byUser);
     countDown = (getState().countDownLengthInMinutes + 1) * 60 - 1;
     showingNotification = false;
 }
@@ -137,6 +137,11 @@ function init(){
     restartCountDown();
     setInterval(onEverySecond, 1000);
     chrome.notifications.onClosed.addListener(restartCountDown);
+    chrome.notifications.onClicked.addListener(function (notificationId) {
+      chrome.notifications.clear(notificationId,function () {
+        restartCountDown();
+      });
+    });
 }
 
 $(document).ready(function(){

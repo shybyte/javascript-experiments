@@ -1,6 +1,6 @@
 {
   "name": "Goal Reminder",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Reminds you of your goals in life while wasting your time in the internet. No registration. Full privacy. Speech (TTS)",
   "icons": {
     "16": "crx/icons/icon-16.png",
